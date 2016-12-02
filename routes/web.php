@@ -11,9 +11,7 @@
 |
 */
 Route::get('/', 'UserController@index');
-
-Route::get('/{user}', 'UserController@index');
-
-Route::get('/article/edit/{article}', 'ArticleController@edit');
-
-Route::post('/api/article/update/{article}', 'ArticleController@update');
+Route::get('/edit', 'ArticleController@edit');
+Route::get('/logout', 'UserController@logout');
+Route::post('/login', 'UserController@login');
+Route::post('/register', 'UserController@register');

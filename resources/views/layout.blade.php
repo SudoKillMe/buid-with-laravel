@@ -5,6 +5,7 @@
         <title></title>
         <link rel="stylesheet" href="/css/flatui/bootstrap.min.css">
         <link rel="stylesheet" href="/css/flatui/flat-ui.min.css">
+        <link rel="stylesheet" href="/css/font-awesome.min.css">
         @yield('header')
     </head>
     <body>
