@@ -2,25 +2,48 @@
 
 @section('header')
 <style media="screen">
-body{
+/*body{
     padding-top:53px;
-}
-.show-pic{
+}*/
+.bg-blue{
     height: 400px;
-    /*background: url(/img/laoshu.jpg) 0 / cover;*/
-    margin-bottom: 0;
-    background: rgba(0,0,0,0);
+    background: rgb(30,87,153);
+    background: -moz-linear-gradient(45deg,  rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(125,185,232,1) 100%);
+    background: -webkit-linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+    background: linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
+    box-sizing: border-box;
+    padding: 53px;
+    text-align: center;
     position: relative;
 }
-.show-pic::before{
-    content: '';
+.vigilant{
     position: absolute;
-    top:0;bottom:0;right:0;left:0;
-    background: url(/img/laoshu.jpg) 0 / cover;
-    filter: blur(5px);
-    margin:-10px 0;
-    z-index: -1;
+    top:50%;left:50%;
+    transform: translate(-50%, -50%);
 }
+.vigilant-content{
+    color: #fff;
+}
+
+/*.bg-blue p,.bg-blue h5{
+    margin:0;
+    padding:0;
+}*/
+.bg-transparent{
+    background: rgba(0,0,0,.1);
+}
+.navbar-default .navbar-nav>li>.white-font, .white-font {
+    color: rgba(196,227,255,0.8);
+}
+.navbar-default .navbar-nav>li>.white-font:hover,.white-font:hover{
+    color: rgba(255,255,255,1);
+}
+.bg-white{
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
 .text-warp{
     height:400px;
     position: relative;
@@ -93,35 +116,19 @@ body{
 @endsection
 
 @section('content')
-<!-- 顶部导航栏 -->
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <ul class="nav navbar-nav">
-            <li>
-                <a href="javascript:void(0)">欢迎来到我的个人小站</a>
-            </li>
-        </ul>
-        @if (!empty($user))
-        <ul class="nav navbar-nav navbar-right">
-            <li><a>你好，<span>{{ $user->name }}</span></a></li>
-            <li><a href="/logout">退出登录</a></li>
-        </ul>
-        @else
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="javascript:void(0)">你好，游客</a></li>
-            <li data-toggle="modal" data-target="#login-modal"><a href="#">登录</a></li>
-            <li data-toggle="modal" data-target="#register-modal"><a href="#">注册</a></li>
-        </ul>
-        @endif
-    </div>
-</nav>
 
-<!-- 中间图片 -->
-<div class="jumbotron show-pic">
+<div class="bg-blue">
+    <div class="vigilant">
+        <h5 class="vigilant-content">Talk is cheap, show me the CODE</h5>
+        <p class="author white-font">-- Linus Torvalds</p>
+    </div>
 </div>
+<!-- 中间图片 -->
+<!-- <div class="jumbotron show-pic">
+</div> -->
 
 <!-- 中部导航栏 -->
-<nav class="navbar navbar-default tabs" role="navigation">
+<nav class="navbar navbar-default tabs bg-white" role="navigation">
     <div class="container-fluid container">
         <!-- 右侧临界点的转换按钮 -->
         <div class="navbar-header">
@@ -151,7 +158,7 @@ body{
                 <li><a href="#">工具</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">写篇文章</a></li>
+                <li><a href="/edit">写篇文章</a></li>
             </ul>
         </div>
     </div>

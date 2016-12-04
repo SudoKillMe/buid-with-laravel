@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Cookie\CookieJar;
 use App\User;
 
 class UserController extends Controller
@@ -14,10 +13,10 @@ class UserController extends Controller
     public function index (Request $request)
     {
         $name = $request->cookie('user');
-        
         $user = User::where([
             'name'     => $name,
         ])->first();
+
         //$user = User::find($uid);
         return view('index', compact('user')); 
     }
