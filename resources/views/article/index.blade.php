@@ -30,19 +30,6 @@
     margin:0;
     padding:0;
 }*/
-.bg-transparent{
-    background: rgba(0,0,0,.1);
-}
-.navbar-default .navbar-nav>li>.white-font, .white-font {
-    color: rgba(196,227,255,0.8);
-}
-.navbar-default .navbar-nav>li>.white-font:hover,.white-font:hover{
-    color: rgba(255,255,255,1);
-}
-.bg-white{
-    background: #fff;
-    border-bottom: 1px solid #eee;
-}
 
 .text-warp{
     height:400px;
@@ -69,6 +56,7 @@
 }
 .tip{
     margin-bottom: 5px;
+/*    border-bottom: 1px dashed #ddd; */
 }
 .tip-item{
     margin-right: 15px;
@@ -105,11 +93,23 @@
         margin: 40px auto;
     }
 }
+
 .list-group-item {
     margin-bottom: 10px;
     border: none;
     border-bottom: 1px dashed #ddd;
 }
+.list-group-item-text{
+    font-size: 13px;
+    line-height: 1.9;
+    word-break: break-all;
+    word-wrap: break-word;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipse;
+    display: none;
+}
+
 /*hack*/
 </style>
 
@@ -158,7 +158,7 @@
                 <li><a href="#">工具</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/edit">写篇文章</a></li>
+                <li><a href="/articles/create">写篇文章</a></li>
             </ul>
         </div>
     </div>
@@ -169,28 +169,19 @@
     <div class="row content-wrap">
         <div class="left col-sm-8 col-xs-12">
             <div class="list-group">
-                @if (!empty($user))
-                @foreach ($user->articles as $article)
-                <a href="#" class="list-group-item">
-                    <h6 class="list-group-item-heading">{{ $article->title }}</h6>
+                @if (!empty($articles))
+                @foreach ($articles as $article)
+                <a href="/articles/{{ $article->id }}" class="list-group-item">
+                    <h5 class="list-group-item-heading">{{ $article->title }}</h5>
                     <p class="tip">
                         <span class="tip-item palette-headline"><span class="fui-time"></span> {{ $article->updated_at }}</span>
                         <span class="tip-item palette-headline"><span class="fui-eye"></span> {{ $article->view_count }}人阅读</span>
                         <span class="tip-item palette-headline"><span class="fui-bubble"></span> {{ $article->view_count }}人评论</span>
                     </p>
-                    <p class="list-group-item-text">{{ $article->content }}</p>
+                    <p class="list-group-item-text short-content" data-value="{{ $article->content }}">内容加载中...</p>
                 </a>
                 @endforeach
                 @endif
-                <a href="#" class="list-group-item">
-                    <h6 class="list-group-item-heading">我是一个标题</h6>
-                    <p class="tip">
-                        <span class="tip-item palette-headline"><span class="fui-time"></span> 2016-11-28</span>
-                        <span class="tip-item palette-headline"><span class="fui-eye"></span> 23人阅读</span>
-                        <span class="tip-item palette-headline"><span class="fui-bubble"></span> 23人阅读</span>
-                    </p>
-                    <p class="list-group-item-text">我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容我是标题的内容</p>
-                </a>
             </div>
         </div>
         <div class="right col-sm-4 col-xs-12">
@@ -228,7 +219,7 @@
             </div>
             <div class="modal-body">
                 <form class="login-form" action="/login" method="post">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    {{ csrf_field() }}
                     <div class="control-group larger-margin-bottom">
                         <input type="text" class="login-field form-control input-hg" name="name" placeholder="Enter your name" id="login-name">
                         <span class="icon-user input-icon"></span>
@@ -255,7 +246,7 @@
             </div>
             <div class="modal-body">
                 <form class="login-form" action="/register" method="post">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    {{ csrf_field() }}
                     <div class="control-group larger-margin-bottom">
                         <input type="text" class="login-field form-control input-hg" name="name" placeholder="Enter your name" id="register-name">
                         <span class="icon-user input-icon"></span>
@@ -280,5 +271,15 @@
 @endsection
 
 @section('script')
-
+<script src='/js/markdown.min.js'></script>
+<script>
+    $('.short-content').each(function () {
+        var html = markdown.toHTML($(this).attr('data-value'));
+        var pure_text = $(html).text();
+        //console.log(pure_text);
+        $(this).text(pure_text);
+        // $(this).html(html);
+        $(this).show();
+    });
+</script>
 @endsection

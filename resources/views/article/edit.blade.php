@@ -1,122 +1,99 @@
 @extends('layout')
-
-@section('header')
 <style>
-	body {
-		padding: 53px 0;
+	body{
+		padding: 70px 0;
 	}
-	.wrap{
-		margin-top: 50px;
+	#hack-title{
+		margin: 20px 0;
 	}
-	.inner-wrap{
-		border: 1px solid grey;
+	.title-text{
+		font-size: 18px;
+		font-weight: bold;
 	}
-	.title-input{
-		margin: 10px 0;
+	.left,.right{
+		width: 50%;
+		height: 900px;
 	}
-	.toolbar-icon{
-		color: #000;
+	.left{
+		float: left;
 	}
-	.toolbar-icon:hover{
-		color: green;
+	.submit {
+		position: fixed;
+		bottom: 30px;
+		margin-top: -50px;
+		margin-left: 10px;
 	}
-	#editor {
-		margin: 10px 0 10px;
-		border-radius: 6px;
-		height: 600px;
+	.right{
 		border: 2px solid #bdc3c7;
-		outline: none;
+		border-radius: 6px;
+		float: right;
 		box-sizing: border-box;
-		padding: 10px;
+		padding: 20px;
+		background: #fdfaf3;
+		overflow-y: scroll;
 	}
-	a{
-		padding: 10px;
-	}
+/*	.content{
+		height: 600px;
+	}*/
 </style>
-@endsection
-
 @section('content')
-	<div class="wrap">
-		<div class="container inner-wrap">
-			<div class="title">
-				<input type="text" placeholder="标题" class="form-control title-input">
-			</div>
-			<div class="content">
-				<div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
-					<div class="btn-group">
-					<a href="javascript:void(0)" data-edit="bold" class="btn toolbar-icon"><i class="icon-bold"></i></a>
-					</div>
-					<div class="btn-group">
-					<a href="javascript:void(0)" data-edit="italic" class="btn toolbar-icon"><i class="icon-italic"></i></a>
-					</div>
-					<div class="btn-group">
-					<a href="javascript:void(0)" data-edit="underline" class="btn toolbar-icon"><i class="icon-underline"></i></a>
-					</div>
-					<div class="btn-group">
-					<a href="javascript:void(0)" data-edit="indent" class="btn toolbar-icon"><i class="icon-indent-right"></i></a>
-					</div>
-					<div class="btn-group">
-					<a href="javascript:void(0)" data-edit="outdent" class="btn toolbar-icon"><i class="icon-indent-left"></i></a>
-					</div>
-					<div class="btn-group">
-					<a href="javascript:void(0)" class="btn dropdown-toggle toolbar-icon" data-toggle="dropdown" data-original-title="font size">
-						<i class="icon-text-height"></i>
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="javascript:void(0)" data-edit="fontSize 5">
-								<font size="5">Huge</font>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)" data-edit="fontSize 3">
-								<font size="3">Normal</font>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)" data-edit="fontSize 1">
-								<font size="1">Small</font>
-							</a>
-						</li>
-					</ul>
-					</div>
-				</div>
-				<div id="editor"></div>
-			</div>
-			<button class="btn btn-primary btn-lg submit">提交</button>
-			</form>
+	<div class="container">
+	@if (isset($article))
+	<form action="/articles/{{$article->id}}/" method="post" class="form-horizontal" role="form">
+		<div class="form-group" id="hack-title">
+			<label for="title-input" class="title-text">标题</label>
+			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" value="{{$article->title}}" id="title-input">
 		</div>
 
-	</div>
+		<p class="title-text">内容区</p> 
+		<div class="left">
+			
+			{{ csrf_field() }}
+			{{ method_field('PUT') }}
+			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" id="content-input">{{$article->content}}</textarea>
+			<button class="btn btn-primary submit">提交</button>
+			
+		</div>
+		<div class="right preview"></div>
+	</form>
+	@else 
+	<form action="/articles" method="post" class="form-horizontal" role="form">
+		<div class="form-group" id="hack-title">
+			<label for="title-input" class="title-text">标题</label>
+			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" id="title-input">
+		</div>
 
-	
+		<p class="title-text">内容区</p> 
+		<div class="left">
+			
+			{{ csrf_field() }}
+			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content"></textarea>
+			<button class="btn btn-primary submit">提交</button>
+			
+		</div>
+		
+		<div class="right preview"></div>
+	</form>
+	@endif
+	</div>
 @endsection
 
 @section('script')
-<script src="/js/bootstrap-wysiwyg.js"></script>
+<script src='/js/markdown.min.js'></script>
 <script>
-	$('#editor').wysiwyg();
-</script>
-<script>
-	$(function () {
-		$('.submit').on('click', function () {
-			$title = $('.title-input').val();
-			$content = $('#editor').html();
+	var textarea = document.querySelector('.content');
+	var preview = document.querySelector('.preview');
 
-			$.ajax({
-				url: '/edit/save',
-				data: {
-					title: $title,
-					content: $content
-				},
-				method: 'POST',
-				success: function () {}
-			});
-		});
+	if (textarea.value) {
+		preview.innerHTML = markdown.toHTML(textarea.value);
+	}
+
+	textarea.addEventListener('input', function () {
+		preview.innerHTML = markdown.toHTML(this.value);
 	});
+
 </script>
-
-
-
+<script>
+	
+</script>
 @endsection

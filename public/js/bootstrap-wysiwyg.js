@@ -187,7 +187,7 @@
 			// 'ctrl+e meta+e': 'justifycenter',
 			// 'ctrl+j meta+j': 'justifyfull',
 			// 'shift+tab': 'outdent',
-			'tab': 'indent'
+			// 'tab': 'indent'
 		},
 		toolbarSelector: '[data-role=editor-toolbar]',
 		commandRole: 'edit',

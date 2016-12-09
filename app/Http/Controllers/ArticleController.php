@@ -4,20 +4,64 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Article;
-use App\User;
+
 
 class ArticleController extends Controller
 {
-    public function edit (Request $request, Article $article)
+
+    public function index (Request $request)
     {
-        $name = $request->cookie('user');
-        
-        $user = User::where([
-            'name'     => $name,
-        ])->first();
-        return view('article.edit', compact('article', 'user'));
+        $articles = Article::all();
+
+        return view('article.index', compact('articles'));
     }
 
+    public function create () 
+    {
+        return view('article.edit');
+    }
+
+    public function show (Request $request, $id) 
+    {
+        $article = Article::find($id);
+        
+        if (!$article)  return view('errors.404');
+
+        $article->view_count = $article->view_count + 1;
+        $article->save();
+
+        return view('article.detail', compact('article'));
+    }
+
+    public function edit (Request $request, $id)
+    {
+        $article = Article::find($id);
+        $article->content = $article->content;
+        if (!$article)  return view('errors.404');
+        
+        return view('article.edit', compact('article'));
+    }
+
+    public function update (Request $request, Article $article)
+    {   
+        $article->title = $request->input('title');
+        $article->content = $request->input('content');
+        
+        $article->save();
+
+        return view('article.detail', compact('article'));
+    }
+    public function store (Request $request)
+    {
+        $article = new Article;
+        $article->title = $request->input('title');
+        $article->content = $request->input('content');
+
+        $article->save();
+
+        return redirect()->action('ArticleController@show', compact('article'));
+
+    }
     public function save (Request $request)
     {
         $title = $request->input('title');
@@ -28,12 +72,4 @@ class ArticleController extends Controller
         $article->content = $content;
     }
 
-    public function update (Request $request, Article $article)
-    {
-        $article->title = $request->input('title');
-        $article->content = $request->input('content');
-        $article->save();
-        return redirect('/');
-        return view('index', compact('article'));
-    }
 }
