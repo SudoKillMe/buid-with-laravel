@@ -3,6 +3,26 @@
 	body{
 		padding: 70px 0;
 	}
+	.bg-blue{
+	    height: 400px;
+	    background: rgb(30,87,153);
+	    background: -moz-linear-gradient(45deg,  rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(125,185,232,1) 100%);
+	    background: -webkit-linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+	    background: linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+	    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
+	    box-sizing: border-box;
+	    padding: 53px;
+	    text-align: center;
+	    position: relative;
+	}
+	.vigilant{
+	    position: absolute;
+	    top:50%;left:50%;
+	    transform: translate(-50%, -50%);
+	}
+	.vigilant-content{
+	    color: #fff;
+	}
 	#hack-title{
 		margin: 20px 0;
 	}
@@ -16,12 +36,16 @@
 	}
 	.left{
 		float: left;
+		position: relative;
+		padding-bottom: 50px;
 	}
+/*	.content{
+		position: relative;
+		padding-bottom: 50px;
+	}*/
 	.submit {
-		position: fixed;
-		bottom: 30px;
-		margin-top: -50px;
-		margin-left: 10px;
+		position: absolute;
+		bottom: 10px; right: 10px;
 	}
 	.right{
 		border: 2px solid #bdc3c7;
@@ -37,6 +61,13 @@
 	}*/
 </style>
 @section('content')
+
+	<div class="bg-blue">
+	    <div class="vigilant">
+	        <h5 class="vigilant-content">Talk is cheap, show me the CODE</h5>
+	        <p class="author white-font">-- Linus Torvalds</p>
+	    </div>
+	</div>
 	<div class="container">
 	@if (isset($article))
 	<form action="/articles/{{$article->id}}/" method="post" class="form-horizontal" role="form">
@@ -67,7 +98,7 @@
 		<div class="left">
 			
 			{{ csrf_field() }}
-			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content"></textarea>
+			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
 			<button class="btn btn-primary submit">提交</button>
 			
 		</div>
@@ -90,6 +121,7 @@
 
 	textarea.addEventListener('input', function () {
 		preview.innerHTML = markdown.toHTML(this.value);
+		preview.scrollTop = preview.scrollHeight;
 	});
 
 </script>

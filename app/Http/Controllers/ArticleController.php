@@ -49,7 +49,7 @@ class ArticleController extends Controller
         
         $article->save();
 
-        return view('article.detail', compact('article'));
+        return redirect()->action('ArticleController@show', compact('article'));
     }
     public function store (Request $request)
     {

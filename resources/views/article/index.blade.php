@@ -45,7 +45,9 @@
 .tabs{
     margin-bottom: 0
 }
-
+.fixed-top-top{
+    top: 53px;
+}
 .content-wrap{
     height:1000px;
 }
@@ -273,13 +275,29 @@
 @section('script')
 <script src='/js/markdown.min.js'></script>
 <script>
-    $('.short-content').each(function () {
-        var html = markdown.toHTML($(this).attr('data-value'));
-        var pure_text = $(html).text();
-        //console.log(pure_text);
-        $(this).text(pure_text);
-        // $(this).html(html);
-        $(this).show();
+    $(function () {
+
+        $tab = $('.tabs');
+        $height = $('.bg-blue').innerHeight() - $tab.height();
+        $(document).scroll(function () {
+            console.log($height);
+            console.log( $(this).scrollTop());
+            if ( $(this).scrollTop() >= $height ) {
+               $tab.addClass('navbar-fixed-top fixed-top-top');
+            } else {
+                $tab.removeClass('navbar-fixed-top fixed-top-top');
+            }
+        });
+
+        $('.short-content').each(function () {
+           var html = markdown.toHTML($(this).attr('data-value'));
+           var pure_text = $(html).text();
+           //console.log(pure_text);
+           $(this).text(pure_text);
+           // $(this).html(html);
+           $(this).show();
+        }); 
     });
+
 </script>
 @endsection

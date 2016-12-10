@@ -7,8 +7,16 @@
         <link rel="stylesheet" href="/css/flatui/flat-ui.min.css">
         <link rel="stylesheet" href="/css/font-awesome.min.css">
         <style>
+            body{
+                margin:0;padding:0 0 50px;
+                position: relative;
+            }
             .bg-transparent{
-                background: rgba(0,0,0,.1);
+                /*background: rgba(0,0,0,.1);*/
+                background: -moz-linear-gradient(45deg,  rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(125,185,232,1) 100%);
+                background: -webkit-linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+                background: linear-gradient(45deg,  rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(125,185,232,1) 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
             }
             .navbar-default .navbar-nav>li>.white-font, .white-font {
                 color: rgba(196,227,255,0.8);
@@ -20,13 +28,25 @@
                 background: #fff;
                 border-bottom: 1px solid #eee;
             }
-
+            
+            .footer{
+                position: absolute;
+                bottom:0;
+                width: 100%;
+                background: #eee;
+                text-align: center;
+            }
+            .copyright{
+                margin:0;
+                height: 40px;
+                line-height: 40px;
+            }
         </style>
         @yield('header')
     </head>
     <body>
         <!-- 顶部导航栏 -->
-        <nav class="navbar navbar-default navbar-fixed-top bg-transparent" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top bg-transparent top" role="navigation">
             <div class="container">
                 <ul class="nav navbar-nav">
                     <li>
@@ -54,11 +74,27 @@
         </nav> 
         @yield('content')
 
-        @yield('footer')
+        <div class="footer">
+            <p class="copyright">copyright &copy; 2016 techer</p>
+        </div>
     </body>
     <script type="text/javascript" src="/js/flatui/jquery.min.js"></script>
     <script type="text/javascript" src="/js/flatui/flat-ui.min.js"></script>
     <script type="text/javascript" src="/js/flatui/respond.min.js"></script>
     <script src="/js/util.js"></script>
+    <script>
+        // $(function () {
+        //     $topbar = $('.top');
+        //     $height = $topbar.height();
+        //     $(document).scroll(function () {
+        //         if ( $(this).scrollTop() >= $height ) {
+        //             $topbar.removeClass('bg-transparent');
+        //         } else {
+        //             $topbar.addClass('bg-transparent');
+        //         }
+                
+        //     });
+        // });
+    </script>
     @yield('script')
 </html>
