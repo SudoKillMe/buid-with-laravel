@@ -29,9 +29,6 @@
 		box-sizing: border-box;
 		padding: 20px 30px;
 	}
-	.register-card{
-		display: none;
-	}
 	.title{
 		text-align: center;
 		margin-bottom: 30px;
@@ -54,7 +51,7 @@
 @section('content')
   <div class="bg">
    <div class="card">
-    <form action="/login" class="form login-card" method="post">
+    <form action="/register" class="form login-card" method="post">
         {{ csrf_field() }}
     	<h3 class="title">T's River</h3>
         <div class="form-group{{ $errors->has('name_error') ? ' has-error' : '' }}">
@@ -75,11 +72,20 @@
                 <span class="icon-lock input-icon"></span>   
             </div>
     	</div>
+        <div class="form-group{{ $errors->has('pass_error') ? ' has-error' : '' }}">
+            @if ($errors->has('cpass_error'))
+            <label for="input-cpasswd" class="control-label">{{ $errors->first('cpass_error') }}</label>
+            @endif
+            <div class="input-wrap">
+                <input type="text" class="form-control input-lg" placeholder="password" name="c-password" id="cpasswd">
+                <span class="icon-lock input-icon"></span>   
+            </div>
+        </div>
     	<div class="form-group">
-    		<button type="submit" class="btn btn-primary btn-block">登录</button>
+    		<button type="submit" class="btn btn-primary btn-block">注册</button>
     	</div>
     	<div class="form-group">
-    		<a href="/register" class="register">注册</a>
+    		<a href="/login" class="login">登录</a>
     		<a href="/" class="guest">以游客身份登录</a>
     	</div>
     </form>

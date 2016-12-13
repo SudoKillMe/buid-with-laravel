@@ -11,7 +11,7 @@ class ArticleTableSeeder extends Seeder
      */
     public function run()
     {
-        $articles = factory(App\User::class, 10)->create()->each(function ($u) {
+        $articles = factory(App\User::class, 1)->create()->each(function ($u) {
             $u->articles()->save(factory(App\Article::class)->make());
             $u->articles()->save(factory(App\Article::class)->make());
             $u->articles()->save(factory(App\Article::class)->make());

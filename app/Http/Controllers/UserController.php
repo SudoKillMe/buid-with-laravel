@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class UserController extends Controller
@@ -10,29 +11,35 @@ class UserController extends Controller
 
     const EXPIRE_TIME = 60 * 24 * 30;
 
-    public function index (Request $request)
+    public function loginPage (Request $request)
     {
-        $name = $request->cookie('user');
-        $user = User::where([
-            'name'     => $name,
-        ])->first();
+        return view('auth.login');
+    }
 
-        //$user = User::find($uid);
-        return view('index', compact('user')); 
+    public function registerPage (Request $request)
+    {
+        return view('auth.register');
     }
 
     public function login (Request $request)
     {
-        $name = $request->input('name');
-        $password = $request->input('password');
+        $user = User::where(['name' => $request->input('name')])->first();
 
-        $user = User::where(['name' => $name, 'password' => $password])->first();
+        if ($user && Hash::check($request->input('password'), $user['password'])) {
+
+            session(['user' => $user]);
+            return redirect('/');
+        }
 
         if (!$user) {
-            return "用户不存在";
+            return back()
+                ->withInput(['name' => $request->input('name')])
+                ->withErrors(['name_error' => '用户名不存在']);
         }
-        // return response()->view('index', compact('user'))->cookie('user', $user['id'], self::EXPIRE_TIME);
-        return redirect('/')->cookie('user', $name, 20); 
+
+        return back()
+            ->withInput(['name' => $request->input('name')])
+            ->withErrors(['pass_error' => '密码错误']);
     }
 
     public function register (Request $request)
@@ -54,8 +61,11 @@ class UserController extends Controller
         return redirect('/')->cookie('user', $name, 20);
     }
 
-    public function logout ()
+    public function logout (Request $request)
     {
-        return redirect('/')->withCookie(cookie('user', '', -1));
+        $request->session()->forget('user');
+        return redirect('/');
     }
+
+    
 }

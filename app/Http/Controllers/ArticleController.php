@@ -9,6 +9,12 @@ use App\Article;
 class ArticleController extends Controller
 {
 
+    public function __construct () 
+    {
+        $this->middleware('userauth', ['only' => ['create', 'edit', 'delete']]);
+        // $this->middleware('guestauth');
+    }
+
     public function index (Request $request)
     {
         $articles = Article::all();
@@ -51,6 +57,7 @@ class ArticleController extends Controller
 
         return redirect()->action('ArticleController@show', compact('article'));
     }
+
     public function store (Request $request)
     {
         $article = new Article;
@@ -62,6 +69,7 @@ class ArticleController extends Controller
         return redirect()->action('ArticleController@show', compact('article'));
 
     }
+    
     public function save (Request $request)
     {
         $title = $request->input('title');
