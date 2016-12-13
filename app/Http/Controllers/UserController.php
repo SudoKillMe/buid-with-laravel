@@ -10,6 +10,7 @@ class UserController extends Controller
 {
 
     const EXPIRE_TIME = 60 * 24 * 30;
+    
 
     public function loginPage (Request $request)
     {
@@ -49,7 +50,7 @@ class UserController extends Controller
             'password'   => 'required',
             // 'c-password' => 'confirmed:password',
         ]);
-        
+
         $name = $request->input('name');
         $password = $request->input('password');
 
@@ -74,5 +75,5 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    
+
 }
