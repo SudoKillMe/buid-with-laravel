@@ -17,6 +17,7 @@ class ArticleController extends Controller
 
     public function index (Request $request)
     {
+        $user = session('user')
         $articles = Article::all();
 
         return view('article.index', compact('articles'));

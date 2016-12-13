@@ -17,5 +17,6 @@ Route::resource('/articles', 'ArticleController');
 Route::get('/login', 'UserController@loginPage');
 Route::get('/register', 'UserController@registerPage');
 Route::post('login', 'UserController@login');
+Route::post('/register', 'UserController@register');
 Route::get('/logout', 'UserController@logout');
 

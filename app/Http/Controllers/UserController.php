@@ -47,8 +47,9 @@ class UserController extends Controller
         $this->validate($request, [
             'name'       => 'required|unique:users|max:30',
             'password'   => 'required',
-            'c-password' => 'confirmed:password',
+            // 'c-password' => 'confirmed:password',
         ]);
+        
         $name = $request->input('name');
         $password = $request->input('password');
 
@@ -58,7 +59,13 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect('/')->cookie('user', $name, 20);
+        session(['user' => $user]);
+        return redirect('/');
+        // return redirect()->action('UserController@login')
+        //     ->withInput([
+        //         'name' => $request->input('name'),
+        //         'password' => $request->input('password'),
+        //     ]);
     }
 
     public function logout (Request $request)

@@ -54,18 +54,19 @@
     <form action="/register" class="form login-card" method="post">
         {{ csrf_field() }}
     	<h3 class="title">T's River</h3>
-        <div class="form-group{{ $errors->has('name_error') ? ' has-error' : '' }}">
-            @if ($errors->has('name_error'))
-            <label for="input-name" class="control-label">{{ $errors->first('name_error') }}</label>
+ 
+        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+            @if ($errors->has('name'))
+            <label for="input-name" class="control-label">{{ $errors->first('name') }}</label>
             @endif
             <div class="input-wrap">
     		    <input type="text" class="form-control input-lg" placeholder="username" name="name" id="input-name" value="{{ old('name') }}">
                 <span class="icon-user input-icon"></span>
             </div>
     	</div>
-        <div class="form-group{{ $errors->has('pass_error') ? ' has-error' : '' }}">
-            @if ($errors->has('pass_error'))
-            <label for="input-passwd" class="control-label">{{ $errors->first('pass_error') }}</label>
+        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+            @if ($errors->has('password'))
+            <label for="input-passwd" class="control-label">{{ $errors->first('password') }}</label>
             @endif
             <div class="input-wrap">
     		    <input type="text" class="form-control input-lg" placeholder="password" name="password" id="passwd">
