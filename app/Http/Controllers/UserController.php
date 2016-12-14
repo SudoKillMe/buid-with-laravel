@@ -10,6 +10,7 @@ class UserController extends Controller
 {
 
     const EXPIRE_TIME = 60 * 24 * 30;
+    
 
     public function loginPage (Request $request)
     {
@@ -69,5 +70,4 @@ class UserController extends Controller
     }
 
 
-    
 }
