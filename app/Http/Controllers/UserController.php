@@ -27,7 +27,8 @@ class UserController extends Controller
 
         if ($user && Hash::check($request->input('password'), $user['password'])) {
 
-            session(['user' => $user]);
+            session(['user' => $user, 'login' => 1]);
+            //dd($request->session());
             return redirect('/');
         }
 
@@ -49,30 +50,24 @@ class UserController extends Controller
             'password'   => 'required',
             // 'c-password' => 'confirmed:password',
         ]);
-        
-        $name = $request->input('name');
-        $password = $request->input('password');
 
         $user = new User;
-        $user->name = $name;
-        $user->password = $password;
+        $user->name = $request->input('name');
+        $user->password = $request->input('password');
 
         $user->save();
 
-        session(['user' => $user]);
+        session(['user' => $user, 'login' => 1]);
         return redirect('/');
-        // return redirect()->action('UserController@login')
-        //     ->withInput([
-        //         'name' => $request->input('name'),
-        //         'password' => $request->input('password'),
-        //     ]);
+
     }
 
     public function logout (Request $request)
     {
-        $request->session()->forget('user');
+        $request->session()->flush();
         return redirect('/');
     }
+
 
     
 }

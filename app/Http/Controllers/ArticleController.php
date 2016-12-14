@@ -4,23 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Article;
-
+use App\User;
+use App\Category;
 
 class ArticleController extends Controller
 {
 
     public function __construct () 
     {
-        $this->middleware('userauth', ['only' => ['create', 'edit', 'delete']]);
-        // $this->middleware('guestauth');
+        $this->middleware('userauth', ['only' => ['create', 'edit', 'delete', 'update', 'store']]);
     }
 
     public function index (Request $request)
     {
-        $user = session('user')
-        $articles = Article::all();
+        $user = User::currentUser();
+        
+        $articles = $user->articles;
 
-        return view('article.index', compact('articles'));
+        $categories = Category::all();
+
+        return view('article.index', compact('articles', 'categories'));
     }
 
     public function create () 
@@ -44,6 +47,7 @@ class ArticleController extends Controller
     {
         $article = Article::find($id);
         $article->content = $article->content;
+
         if (!$article)  return view('errors.404');
         
         return view('article.edit', compact('article'));
@@ -61,9 +65,12 @@ class ArticleController extends Controller
 
     public function store (Request $request)
     {
+        $user = User::currentUser();
+
         $article = new Article;
         $article->title = $request->input('title');
         $article->content = $request->input('content');
+        $article->user_id = $user['id'];
 
         $article->save();
 
@@ -71,14 +78,19 @@ class ArticleController extends Controller
 
     }
     
-    public function save (Request $request)
+    public function category (Request $request, $id)
     {
-        $title = $request->input('title');
-        $content = $request->input('content');
+        $user = User::currentUser();
 
-        $article = new Article;
-        $article->title = $title;
-        $article->content = $content;
+        $category = Category::find($id);
+        $categories = Category::all();
+
+        if (!$category) return view('errors.404');
+
+        $articles = $category->articles()->where('user_id', $user['id'])->get();
+
+
+        return view('article.index', compact('articles', 'categories'));
     }
 
 }

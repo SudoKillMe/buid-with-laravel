@@ -48,6 +48,9 @@
         top:50%;
         transform: translateY(-50%);
     }
+    .btn-large{
+        padding: 12px 0 13px;
+    }
 </style>
 @endsection
 
@@ -56,13 +59,13 @@
    <div class="card">
     <form action="/login" class="form login-card" method="post">
         {{ csrf_field() }}
-    	<h3 class="title">T's River</h3>
+    	<h3 class="title">TimeRiver</h3>
         <div class="form-group{{ $errors->has('name_error') ? ' has-error' : '' }}">
             @if ($errors->has('name_error'))
             <label for="input-name" class="control-label">{{ $errors->first('name_error') }}</label>
             @endif
             <div class="input-wrap">
-    		    <input type="text" class="form-control input-lg" placeholder="username" name="name" id="input-name" value="{{ old('name') }}">
+    		    <input type="text" class="form-control input-lg login-field" placeholder="username" name="name" id="input-name" value="{{ old('name') }}">
                 <span class="icon-user input-icon"></span>
             </div>
     	</div>
@@ -76,7 +79,7 @@
             </div>
     	</div>
     	<div class="form-group">
-    		<button type="submit" class="btn btn-primary btn-block">登录</button>
+    		<button type="submit" class="btn btn-primary btn-large btn-block">登录</button>
     	</div>
     	<div class="form-group">
     		<a href="/register" class="register">注册</a>

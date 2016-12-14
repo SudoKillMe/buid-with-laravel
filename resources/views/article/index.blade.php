@@ -140,7 +140,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#" class="navbar-brand">SOMEONE</a>
+            <a href="#" class="navbar-brand">TIMERIVER</a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-1">
@@ -149,10 +149,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术相关 <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">PHP</a></li>
-                        <li><a href="#">Laravel</a></li>
-                        <li><a href="#">Javascript</a></li>
-                        <li><a href="#">CSS</a></li>
+                        @foreach ($categories as $category)
+                        <li><a href="/articles/category/{{$category->id}}">{{ $category->name }}</a></li>
+                        @endforeach
                         <li class="divider"></li>
                         <li><a href="#">全部</a></li>
                     </ul>
@@ -188,23 +187,7 @@
         </div>
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
-            <div class="todo">
-                <div class="todo-search">
-                    <h6>我的任务</h6>
-                </div>
-                <ul>
-                    <li class="todo-done">
-                        <div class="todo-icon">
-                        </div>
-                        <div class="todo-content">
-                            <h4 class="todo-name">
-                                些一片博客
-                            </h4>
-                            11-30号之前完成
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <canvas id="chart" width="200" height="200"></canvas>
         </div>
     </div>
 
@@ -273,6 +256,7 @@
 @endsection
 
 @section('script')
+<script src="/js/Chart.min.js"></script>
 <script src='/js/markdown.min.js'></script>
 <script>
     $(function () {
@@ -280,8 +264,6 @@
         $tab = $('.tabs');
         $height = $('.bg-blue').innerHeight() - $tab.height();
         $(document).scroll(function () {
-            console.log($height);
-            console.log( $(this).scrollTop());
             if ( $(this).scrollTop() >= $height ) {
                $tab.addClass('navbar-fixed-top fixed-top-top');
             } else {
@@ -292,12 +274,38 @@
         $('.short-content').each(function () {
            var html = markdown.toHTML($(this).attr('data-value'));
            var pure_text = $(html).text();
-           //console.log(pure_text);
+          
            $(this).text(pure_text);
-           // $(this).html(html);
            $(this).show();
         }); 
     });
 
+</script>
+<script>
+    var ctx = document.getElementById('chart').getContext('2d');
+    var data = {
+        labels: ["1月", "2月", "3月", "4月", "5月", "6月"],
+        datasets: [
+            {
+                fillColor: 'rgba(220,220,220,.5)',
+                strokeColor: 'rgba(220,220,220,1)',
+                pointColor: 'rgba(220,220,220,1)',
+                pointStrokeColor: '#fff',
+                data: [65,59,90,81,56,55]
+            }
+        ]
+    };
+    new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            display: false,
+            title: {
+                display: true,
+                text: '活跃'
+            }
+        }
+    });
+   
 </script>
 @endsection

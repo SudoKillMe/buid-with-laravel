@@ -25,12 +25,22 @@
 		color:#fff;
 	}
 	.catalog{
-		height: 53px;
-		line-height: 53px;
+/*		height: 53px;
+		line-height: 53px;*/
 		font-size: 16px ;
 		color: rgba(196, 227, 255, 0.6);
 	}
 	.current-cata{
+		color: #fff;
+	}
+	.breadcrumb{
+		background-color: transparent;
+	}
+	.breadcrumb a{
+		cursor: pointer;
+		color: rgba(196, 227, 255, .8);
+	}
+	.breadcrumb a:hover, .breadcrumb .active{
 		color: #fff;
 	}
 /*	.title{
@@ -65,10 +75,15 @@
 @section('content')
 	<div class="bg-blue">
 		<div class="slogan-wrap container">
-			<h3 class="slogan">SOMEONE</h3>
+			<h3 class="slogan">TIMERIVER</h3>
 		</div>
 		<div class="catalog container">
-			所属类别 &nbsp;&nbsp;&nbsp;&nbsp;<span class="icon-arrow-right"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="current-cata"> php</span>
+			<!-- 所属类别 &nbsp;&nbsp;&nbsp;&nbsp;<span class="icon-arrow-right"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="current-cata"> php</span> -->
+			<ol class="breadcrumb">
+				<li><a href="">Home</a></li>
+				<li><a href="">{{ $article->category['name'] }}</a></li>
+				<li class="active">tttt</li>
+			</ol>
 		</div>
 	</div>
 	<div class="content-wrap container">

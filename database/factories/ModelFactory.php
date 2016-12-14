@@ -32,3 +32,10 @@ $factory->define(App\Article::class, function (Faker\Generator $faker) {
         'view_count' => rand(0, 100),
     ];
 });
+
+$factory->define(App\Category::class, function (Faker\Generator $faker) {
+
+    return [
+        'name' => $faker->name,
+    ];
+});
