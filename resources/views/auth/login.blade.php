@@ -35,6 +35,7 @@
 	.title{
 		text-align: center;
 		margin-bottom: 30px;
+        text-shadow: 5px 5px 5px #B3B8A6;
 	}
 	.guest{
 		float: right;

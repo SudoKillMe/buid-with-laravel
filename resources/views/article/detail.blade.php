@@ -2,6 +2,10 @@
 
 @section('header')
 <style>
+	body {
+		position: absolute;
+		top:0;right: 0;bottom: 0;left: 0;
+	}
 	.bg-blue{
 	    height: 300px;
 	    background: rgb(30,87,153);
@@ -23,6 +27,7 @@
 		line-height: 194px;
 		margin:0;
 		color:#fff;
+		text-shadow: 5px 5px 5px #141414;
 	}
 	.catalog{
 /*		height: 53px;
@@ -80,9 +85,9 @@
 		<div class="catalog container">
 			<!-- 所属类别 &nbsp;&nbsp;&nbsp;&nbsp;<span class="icon-arrow-right"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="current-cata"> php</span> -->
 			<ol class="breadcrumb">
-				<li><a href="">Home</a></li>
-				<li><a href="">{{ $article->category['name'] }}</a></li>
-				<li class="active">tttt</li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/articles/category/{{ $article->category['id'] }}">{{ $article->category['name'] }}</a></li>
+				<li class="active">{{ $article->title }}</li>
 			</ol>
 		</div>
 	</div>

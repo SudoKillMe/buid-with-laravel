@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Article;
 use App\User;
 
@@ -19,20 +20,23 @@ class ArticleController extends Controller
 
     public function index (Request $request)
     {
-\
+
         $user = User::currentUser();
         
         $articles = $user->articles;
 
         $categories = Category::all();
 
+        $archives = $this->archive();
 
-        return view('article.index', compact('articles', 'categories'));
+        return view('article.index', compact('articles', 'categories', 'archives'));
     }
 
     public function create ()
     {
-        return view('article.edit');
+        $categories = Category::all();
+
+        return view('article.edit', compact('categories'));
     }
 
     public function show (Request $request, $id)
@@ -50,17 +54,25 @@ class ArticleController extends Controller
     public function edit (Request $request, $id)
     {
         $article = Article::find($id);
-        $article->content = $article->content;
+        $categories = Category::all();
 
         if (!$article)  return view('errors.404');
 
-        return view('article.edit', compact('article'));
+        return view('article.edit', compact('article', 'categories'));
     }
 
-    public function update (Request $request, Article $article)
+    public function update (Request $request, $id)
     {
+        $user = User::currentUser();
+
+        $article = Article::find($id);
+
+        if(!$article)  return view('errors.404');
+
         $article->title = $request->input('title');
         $article->content = $request->input('content');
+        $article->user_id = $user['id'];
+        $article->category_id = $request->input('category');
 
         $article->save();
 
@@ -75,8 +87,7 @@ class ArticleController extends Controller
         $article->title = $request->input('title');
         $article->content = $request->input('content');
         $article->user_id = $user['id'];
-
-        $article->user_id = $user['id'];
+        $article->category_id = $request->input('category');
 
         $article->save();
 
@@ -96,8 +107,22 @@ class ArticleController extends Controller
 
         $articles = $category->articles()->where('user_id', $user['id'])->get();
 
+        $archives = $this->archive();
 
-        return view('article.index', compact('articles', 'categories'));
+        return view('article.index', compact('articles', 'categories', 'archives'));
+    }
+
+    //根据日期分组，获取每月的文章数量
+    public function archive ()
+    {
+        $user = User::currentUser();
+
+        $archives = Article::where(['user_id' => $user['id']])
+                ->select(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月") as d'), DB::raw('COUNT(*) as c'))
+                ->groupBy(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")'))
+                ->get();
+
+        return $archives;
     }
 
 }

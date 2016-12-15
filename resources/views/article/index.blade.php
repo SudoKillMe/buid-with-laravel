@@ -45,6 +45,9 @@
 .tabs{
     margin-bottom: 0
 }
+.navbar-brand {
+    text-shadow: 2px 2px 2px #B3B8A6;
+}
 .fixed-top-top{
     top: 53px;
 }
@@ -112,7 +115,41 @@
     display: none;
 }
 
-/*hack*/
+
+.archive {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 20px 20px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
+.archive-title {
+    font-size: 16px;
+    padding:10px 0;
+    margin: 0;
+    text-align: center;
+}
+.archive-item {
+    line-height: 40px;
+    display: block;
+    color: #444;
+    box-sizing: border-box;
+    padding: 0 30px;
+    white-space: nowrap;
+    border-top: 1px dashed #dfdfdf;
+}
+.archive-item:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: #444;
+}
+.counter {
+    color: #888;
+    font-size: 14px;
+    line-height: 18px;
+    float: right;
+    margin-top: 11px;
+}
 </style>
 
 @endsection
@@ -188,12 +225,20 @@
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
             <canvas id="chart" width="200" height="200"></canvas>
+            
+            <div class="archive">
+                <p class="archive-title">博客归档</p>
+                @foreach ($archives as $archive)
+                <a  href="/articles/archives" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
+                @endforeach
+            </div>
+            
         </div>
     </div>
 
 </div>
 <!-- 登录modal -->
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-tip" aria-hidden="true">
+<!-- <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-tip" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -218,9 +263,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- 登录modal -->
-<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-tip" aria-hidden="true">
+<!-- <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-tip" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -249,7 +294,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 

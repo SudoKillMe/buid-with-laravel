@@ -54,7 +54,7 @@ class UserController extends Controller
 
         $user = new User;
         $user->name = $request->input('name');
-        $user->password = $request->input('password');
+        $user->password = bcrypt($request->input('password'));
 
         $user->save();
 

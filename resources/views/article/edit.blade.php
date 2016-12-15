@@ -1,4 +1,5 @@
 @extends('layout')
+@section('header')
 <style>
 	body{
 		padding: 70px 0;
@@ -23,6 +24,7 @@
 	.vigilant-content{
 	    color: #fff;
 	}
+
 	#hack-title{
 		margin: 20px 0;
 	}
@@ -39,14 +41,7 @@
 		position: relative;
 		padding-bottom: 50px;
 	}
-/*	.content{
-		position: relative;
-		padding-bottom: 50px;
-	}*/
-	.submit {
-		position: absolute;
-		bottom: 10px; right: 10px;
-	}
+
 	.right{
 		border: 2px solid #bdc3c7;
 		border-radius: 6px;
@@ -56,19 +51,20 @@
 		background: #fdfaf3;
 		overflow-y: scroll;
 	}
-/*	.content{
-		height: 600px;
-	}*/
+	.content-wrap {
+		overflow: hidden;
+	}
+	.form-footer {
+		margin-top: 20px;
+	}
+	.submit {
+		float: right;
+	}
 </style>
+@endsection
 @section('content')
 
-	<div class="bg-blue">
-	    <div class="vigilant">
-	        <h5 class="vigilant-content">Talk is cheap, show me the CODE</h5>
-	        <p class="author white-font">-- Linus Torvalds</p>
-	    </div>
-	</div>
-	<div class="container">
+	<div class="container wrap">
 	@if (isset($article))
 	<form action="/articles/{{$article->id}}/" method="post" class="form-horizontal" role="form">
 		<div class="form-group" id="hack-title">
@@ -77,15 +73,24 @@
 		</div>
 
 		<p class="title-text">内容区</p> 
-		<div class="left">
-			
-			{{ csrf_field() }}
-			{{ method_field('PUT') }}
-			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" id="content-input">{{$article->content}}</textarea>
-			<button class="btn btn-primary submit">提交</button>
-			
+		<div class="content-wrap">
+			<div class="left">
+				{{ csrf_field() }}
+				{{ method_field('PUT') }}
+				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" id="content-input">{{$article->content}}</textarea>
+			</div>
+			<div class="right preview"></div>
 		</div>
-		<div class="right preview"></div>
+
+		<div class="form-footer">
+			<label for="category">选择文章类别</label>
+			<select name="category" id="category" class="form-control-static">
+				@foreach ($categories as $category)
+				<option value="{{$category->id}}" @if ($category->id == $article->category_id) selected @endif>{{ $category->name }}</option>
+				@endforeach
+			</select>
+			<button class="btn btn-primary submit">提交</button>
+		</div>
 	</form>
 	@else 
 	<form action="/articles" method="post" class="form-horizontal" role="form">
@@ -95,15 +100,25 @@
 		</div>
 
 		<p class="title-text">内容区</p> 
-		<div class="left">
-			
-			{{ csrf_field() }}
-			<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
-			<button class="btn btn-primary submit">提交</button>
-			
+		<div class="content-wrap">
+			<div class="left">	
+				{{ csrf_field() }}
+				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
+				<button class="btn btn-primary submit">提交</button>
+			</div>
+			<div class="right preview"></div>
 		</div>
-		
-		<div class="right preview"></div>
+
+		<div class="form-footer">
+			<label for="category">选择文章类别</label>
+			<select name="category" id="category" class="form-control-static">
+				@foreach ($categories as $category)
+				<option value="{{$category->id}}">{{ $category->name }}</option>
+				@endforeach
+			</select>
+			<button class="btn btn-primary submit">提交</button>
+		</div>
+
 	</form>
 	@endif
 	</div>
@@ -125,7 +140,5 @@
 	});
 
 </script>
-<script>
-	
-</script>
+
 @endsection

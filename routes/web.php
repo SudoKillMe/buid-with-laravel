@@ -14,6 +14,7 @@
 Route::get('/', 'ArticleController@index');
 
 Route::get('/articles/category/{id}', 'ArticleController@category');
+Route::get('/articles/archives', 'ArticleController@archive');
 Route::resource('/articles', 'ArticleController');
 
 Route::get('/login', 'UserController@loginPage');
