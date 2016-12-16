@@ -117,20 +117,21 @@
 }
 
 
-.archive {
+.archive,.statistics,.ranking{
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
     margin: 20px 20px;
     background-color: #f3f3f3;
     border-radius: 5px;
 }
-.archive-title {
+.archive-title ,.statics-title,.ranking-title{
     font-size: 16px;
     padding:10px 0;
     margin: 0;
     text-align: center;
 }
-.archive-item {
+.archive-item ,.statics-item,.ranking-item{
+    font-size: 16px;
     line-height: 40px;
     display: block;
     color: #444;
@@ -139,7 +140,7 @@
     white-space: nowrap;
     border-top: 1px dashed #dfdfdf;
 }
-.archive-item:hover {
+.archive-item:hover,.statics-item:hover ,.ranking-item:hover{
     cursor: pointer;
     background-color: #f5f5f5;
     color: #444;
@@ -241,6 +242,20 @@
                 @endforeach
             </div>
             
+            <div class="ranking">
+                <p class="ranking-title">排行榜</p>
+                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
+                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
+                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
+                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
+            </div>
+
+            <div class="statistics">
+                <p class="statics-title">访问统计</p>
+                <li class="statics-item">总访问量 <span class="counter">1111</span></li>
+                <li class="statics-item">该月访问量 <span class="counter">333</span></li>
+                <li class="statics-item">今日访问量 <span class="counter">100</span></li>
+            </div>
         </div>
     </div>
 
@@ -313,8 +328,27 @@
             method: 'GET',
             dataType: 'json',
             success: function (res) {
-                console.log(res);
-                
+                labels = Object.keys(res);
+                for (var i=0; i<labels.length; i++) {
+                    char_data.push(res[labels[i]]);
+                }
+                console.log(labels);
+                console.log(char_data);
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                fillColor: 'rgba(220,220,220,.5)',
+                                strokeColor: 'rgba(220,220,220,1)',
+                                pointColor: 'rgba(220,220,220,1)',
+                                pointStrokeColor: '#fff',
+                                data: char_data
+                            }
+                        ]
+                    },
+                });
             },
             error: function (err) {
                 console.log(err);
@@ -324,21 +358,18 @@
     })
     var ctx = document.getElementById('chart').getContext('2d');
     var data = {
-        labels: ["16-01", "2月", "3月", "4月", "5月", "6月"],
+        labels: labels,
         datasets: [
             {
                 fillColor: 'rgba(220,220,220,.5)',
                 strokeColor: 'rgba(220,220,220,1)',
                 pointColor: 'rgba(220,220,220,1)',
                 pointStrokeColor: '#fff',
-                data: [65,59,90,81,56,55]
+                data: char_data
             }
         ]
     };
-    new Chart(ctx, {
-        type: 'bar',
-        data: data,
-    });
+
    
 </script>
 @endsection
