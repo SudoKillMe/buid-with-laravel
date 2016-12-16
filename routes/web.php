@@ -13,8 +13,8 @@
 
 Route::get('/', 'ArticleController@index');
 
-Route::get('/articles/category/{id}', 'ArticleController@category');
-Route::get('/articles/archives', 'ArticleController@archive');
+Route::get('/articles/category/{category}', 'ArticleController@category');
+Route::get('/articles/archives/{archive}', 'ArticleController@archive');
 Route::resource('/articles', 'ArticleController');
 
 Route::get('/login', 'UserController@loginPage');
@@ -23,3 +23,4 @@ Route::post('login', 'UserController@login');
 Route::post('/register', 'UserController@register');
 Route::get('/logout', 'UserController@logout');
 
+Route::get('/api/archives', 'ArticleController@apiArchives');

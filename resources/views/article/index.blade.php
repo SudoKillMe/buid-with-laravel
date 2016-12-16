@@ -51,6 +51,7 @@
 .fixed-top-top{
     top: 53px;
 }
+
 .content-wrap{
     height:1000px;
 }
@@ -182,8 +183,15 @@
 
         <div class="collapse navbar-collapse" id="navbar-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">日记</a></li>
-                <li class="dropdown">
+                @foreach ($categories as $category) 
+                <li @if ($category_id == $category->id) class="active" @endif>
+                    <a href="/articles/category/{{ $category->id }}">{{ $category->name }}</a>
+                </li>
+                @endforeach
+                <li @if ($category_id == 0) class="active" @endif>
+                    <a href="/articles/category/0">全部</a>
+                </li>
+   <!--              <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术相关 <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         @foreach ($categories as $category)
@@ -192,8 +200,8 @@
                         <li class="divider"></li>
                         <li><a href="#">全部</a></li>
                     </ul>
-                </li>
-                <li><a href="#">工具</a></li>
+                </li> -->
+                <!-- <li><a href="#">工具</a></li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/articles/create">写篇文章</a></li>
@@ -229,7 +237,7 @@
             <div class="archive">
                 <p class="archive-title">博客归档</p>
                 @foreach ($archives as $archive)
-                <a  href="/articles/archives" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
+                <a  href="/articles/archives/{{ $archive->d }}" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
                 @endforeach
             </div>
             
@@ -259,37 +267,6 @@
                         <span class="icon-lock input-icon"></span>
                     </div>
                     <button type="submit" class="btn btn-primary btn-hg btn-block">登录</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!-- 登录modal -->
-<!-- <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-tip" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" name="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title text-center" id="register-tip">注册</h4>
-            </div>
-            <div class="modal-body">
-                <form class="login-form" action="/register" method="post">
-                    {{ csrf_field() }}
-                    <div class="control-group larger-margin-bottom">
-                        <input type="text" class="login-field form-control input-hg" name="name" placeholder="Enter your name" id="register-name">
-                        <span class="icon-user input-icon"></span>
-                    </div>
-                    <div class="control-group larger-margin-bottom">
-                        <input type="password" class="login-field form-control input-hg" name="password" placeholder="Enter your password" id="register-password">
-                        <span class="icon-lock input-icon"></span>
-                    </div>
-                    <div class="control-group larger-margin-bottom">
-                        <input type="password" class="login-field form-control input-hg" name="c-password" placeholder="Confirm your password" id="confirm-password">
-                        <span class="icon-lock input-icon"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-hg btn-block">注册</button>
                 </form>
             </div>
         </div>
@@ -327,9 +304,27 @@
 
 </script>
 <script>
+    var char_data = [];
+    var labels = [];
+    $(function () {
+
+        $.ajax({
+            url: '/api/archives',
+            method: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+    })
     var ctx = document.getElementById('chart').getContext('2d');
     var data = {
-        labels: ["1月", "2月", "3月", "4月", "5月", "6月"],
+        labels: ["16-01", "2月", "3月", "4月", "5月", "6月"],
         datasets: [
             {
                 fillColor: 'rgba(220,220,220,.5)',
@@ -343,13 +338,6 @@
     new Chart(ctx, {
         type: 'bar',
         data: data,
-        options: {
-            display: false,
-            title: {
-                display: true,
-                text: '活跃'
-            }
-        }
     });
    
 </script>

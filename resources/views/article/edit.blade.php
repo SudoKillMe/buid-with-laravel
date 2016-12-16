@@ -103,6 +103,7 @@
 		<div class="content-wrap">
 			<div class="left">	
 				{{ csrf_field() }}
+				{{ method_field('PUT') }}
 				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
 				<button class="btn btn-primary submit">提交</button>
 			</div>

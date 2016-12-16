@@ -75,6 +75,18 @@
 	.edit:hover,.delete:hover{
 		color: rgb(52, 73, 94);
 	}
+
+	.text-center {
+		text-align: center;
+	}
+	/*hack*/
+	@media (min-width: 768px) {
+	    .modal-dialog{
+	        width: 500px;
+	        margin: 40px auto;
+	    }
+	}
+
 </style>
 @endsection
 @section('content')
@@ -97,12 +109,36 @@
 			<span class="time"><span class="icon-time"></span>&nbsp;{{ $article->updated_at }}</span>
 			<span class="view"><span class="icon-eye-open"></span>&nbsp;{{ $article->view_count }}人阅读</span>
 			<span class="edit"><span class="icon-edit">&nbsp;编辑</span></span>
-			<span class="delete"><span class="icon-trash">&nbsp;删除</span></span>
+			<span class="delete"  data-toggle="modal" data-target="#delete-modal"><span class="icon-trash">&nbsp;删除</span></span>
 		</p>
 		<p class="content"></p>
 
 	</div>
-	
+	<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-tip" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" name="button" class="close" data-dismiss="modal">
+					    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title text-center" id="delete-tip">删除</h4>
+				</div>
+				<form action="/articles/{{ $article->id }}" method="post">
+					<div class="modal-body">
+					
+					{{ csrf_field() }}
+					{{ method_field('DELETE') }}
+						<p class="tip text-center">该操作无法恢复，确认删除吗？</p>
+				
+					</div>
+					<div class="modal-footer text-center">	
+						<button type="button" class="btn btn-default btn-lg" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary btn-lg">确认</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<input type="hidden" class="_content" value="{{ $article->content }}">
 @endsection
 
@@ -120,7 +156,5 @@
 
 	content.innerHTML = markdown.toHTML(_content.value);
 
-
-	
 </script>
 @endsection
