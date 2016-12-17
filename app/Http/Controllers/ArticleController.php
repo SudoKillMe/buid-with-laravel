@@ -22,7 +22,7 @@ class ArticleController extends Controller
     /*-------------------------------------------------*/
     public function index (Request $request)
     {
-        
+
         return view('article.index', $this->fetchIndexPageData());
 
     }
@@ -151,7 +151,7 @@ class ArticleController extends Controller
 
         $article->save();
 
-        return $article;
+        return $article->id;
     }
 
     public function fetchShowPageData ($article_id)
