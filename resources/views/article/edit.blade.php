@@ -72,7 +72,7 @@
 			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" value="{{$article->title}}" id="title-input">
 		</div>
 
-		<p class="title-text">内容区</p> 
+		<p class="title-text">内容区</p>
 		<div class="content-wrap">
 			<div class="left">
 				{{ csrf_field() }}
@@ -92,18 +92,17 @@
 			<button class="btn btn-primary submit">提交</button>
 		</div>
 	</form>
-	@else 
+	@else
 	<form action="/articles" method="post" class="form-horizontal" role="form">
 		<div class="form-group" id="hack-title">
 			<label for="title-input" class="title-text">标题</label>
 			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" id="title-input">
 		</div>
 
-		<p class="title-text">内容区</p> 
+		<p class="title-text">内容区</p>
 		<div class="content-wrap">
-			<div class="left">	
+			<div class="left">
 				{{ csrf_field() }}
-				{{ method_field('PUT') }}
 				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
 				<button class="btn btn-primary submit">提交</button>
 			</div>
