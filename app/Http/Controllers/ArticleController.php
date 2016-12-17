@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Article;
 use App\User;
-
+use App\Statistic;
 use App\Category;
 
 
@@ -16,12 +16,13 @@ class ArticleController extends Controller
     public function __construct ()
     {
         $this->middleware('userauth', ['only' => ['create', 'edit', 'destroy', 'update', 'store']]);
+        $this->middleware('statistics');
     }
 
     /*-------------------------------------------------*/
     public function index (Request $request)
     {
-
+        
         return view('article.index', $this->fetchIndexPageData());
 
     }
@@ -46,7 +47,7 @@ class ArticleController extends Controller
         $user = User::currentUser();
 
         $articles = $category_id
-                ? ($archive_id 
+                ? ($archive_id
                     ? $user->articles()
                             ->where('category_id', $category_id)
                             ->where(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")'), $archive_id)
@@ -54,17 +55,21 @@ class ArticleController extends Controller
                     : $user->articles()
                             ->where('category_id', $category_id)
                             ->get())
-                : ($archive_id 
+                : ($archive_id
                     ? $user->articles()
                             ->where(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")'), $archive_id)
                             ->get()
                     : $user->articles);
-        
+
         $categories = Category::all();
 
-        $archives = $this->archives();
+        $archives = $this->archives($user);
 
-        return compact('articles', 'categories', 'archives', 'category_id', 'archive_id');
+        $ranking = $this->rank($user);
+
+        $statistics = Statistic::statistics();
+
+        return compact('articles', 'categories', 'archives', 'ranking', 'category_id', 'archive_id', 'statistics');
     }
      /*-------------------------------------------------*/
 
@@ -72,7 +77,7 @@ class ArticleController extends Controller
      /*-------------------------------------------------*/
     public function create (Request $request)
     {
-        
+
         $data = $this->fetchEditPageData();
 
         return view('article.edit', $data);
@@ -81,7 +86,7 @@ class ArticleController extends Controller
 
     public function edit (Request $request, $article_id)
     {
-        
+
         $data = $this->fetchEditPageData($article_id);
 
         if ( !$data['article'] ) return view('errors.404');
@@ -94,7 +99,7 @@ class ArticleController extends Controller
     {
         $categories = Category::all();
 
-        $article = $article_id 
+        $article = $article_id
                 ? Article::find($article_id)
                 : null;
 
@@ -131,11 +136,11 @@ class ArticleController extends Controller
 
     }
 
-    public function saveArticle($request, $id = 0) 
+    public function saveArticle($request, $id = 0)
     {
         $user = User::currentUser();
 
-        $article = $id 
+        $article = $id
                 ? Article::find($id)
                 : new Article;
 
@@ -149,7 +154,7 @@ class ArticleController extends Controller
         return $article;
     }
 
-    public function fetchShowPageData ($article_id) 
+    public function fetchShowPageData ($article_id)
     {
         $article = Article::find($article_id);
 
@@ -162,26 +167,35 @@ class ArticleController extends Controller
     }
      /*-------------------------------------------------*/
 
-     public function destroy (Request $request, $id) 
-     {
+    public function destroy (Request $request, $id)
+    {
         $article = Article::find($id);
 
         $article->delete();
 
         return view('article.index', $this->fetchIndexPageData());
-     }
+    }
+
+    public function rank ($user)
+    {
+        $ranking = $user->articles()
+                ->orderBy('view_count', 'desc')
+                ->get();
+
+        return $ranking;
+    }
 
     //根据日期分组，获取每月的文章数量
-    public function archives ()
+    public function archives ($user)
     {
-        $user = User::currentUser();
+        // $user = User::currentUser();
 
         $archives = Article::where('user_id', $user['id'])
                 ->select(
-                    DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月") as d'), 
+                    DB::raw('DATE_FORMAT(created_at, "%Y年-%m月") as d'),
                     DB::raw('COUNT(*) as c')
                 )->groupBy(
-                    DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")')
+                    DB::raw('DATE_FORMAT(created_at, "%Y年-%m月")')
                 )->get();
 
         return $archives;
@@ -190,7 +204,7 @@ class ArticleController extends Controller
     public function apiArchives ()
     {
         $user = User::currentUser();
-    
+
         $where_arr = [];
 
         for ($i = 0; $i < 6; $i++) {
@@ -202,13 +216,13 @@ class ArticleController extends Controller
         // select month(updated_at) as m1, count(*) as c from articles group by month(updated_at);
         $archives = Article::where('user_id', $user['id'])
                 ->select(
-                    DB::raw('DATE_FORMAT(updated_at, "%Y-%m") as d'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y-%m") as d'),
                     DB::raw('COUNT(*) as c')
                 )->groupBy(
-                    DB::raw('DATE_FORMAT(updated_at, "%Y-%m")')
+                    DB::raw('DATE_FORMAT(created_at, "%Y-%m")')
                 )->orderBy('d', 'desc')
                 ->get()->toArray();
-        
+
         $result = [];
 
         foreach($where_arr as $k => $v) {
@@ -220,10 +234,10 @@ class ArticleController extends Controller
             if (empty($result[$v])) {
                 $result[$v] = 0;
             }
-           
+
         }
         return $result;
-        
+
     }
 
 

@@ -137,7 +137,6 @@
     color: #444;
     box-sizing: border-box;
     padding: 0 30px;
-    white-space: nowrap;
     border-top: 1px dashed #dfdfdf;
 }
 .archive-item:hover,.statics-item:hover ,.ranking-item:hover{
@@ -184,7 +183,7 @@
 
         <div class="collapse navbar-collapse" id="navbar-1">
             <ul class="nav navbar-nav">
-                @foreach ($categories as $category) 
+                @foreach ($categories as $category)
                 <li @if ($category_id == $category->id) class="active" @endif>
                     <a href="/articles/category/{{ $category->id }}">{{ $category->name }}</a>
                 </li>
@@ -234,27 +233,31 @@
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
             <canvas id="chart" width="200" height="200"></canvas>
-            
+
             <div class="archive">
                 <p class="archive-title">博客归档</p>
                 @foreach ($archives as $archive)
                 <a  href="/articles/archives/{{ $archive->d }}" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
                 @endforeach
             </div>
-            
+
             <div class="ranking">
                 <p class="ranking-title">排行榜</p>
+                @foreach ($ranking as $article)
+                <a href="/articles/{{ $article->id }}" class="ranking-item">
+                    {{ $article->title }} <span class="counter">阅读 {{ $article->view_count }}</span>
+                </a>
+                @endforeach
+                <!-- <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
                 <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
-                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
-                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
-                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
+                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a> -->
             </div>
 
             <div class="statistics">
                 <p class="statics-title">访问统计</p>
-                <li class="statics-item">总访问量 <span class="counter">1111</span></li>
-                <li class="statics-item">该月访问量 <span class="counter">333</span></li>
-                <li class="statics-item">今日访问量 <span class="counter">100</span></li>
+                <li class="statics-item">总访问量 <span class="counter">{{ $statistics[0]->c }}</span></li>
+                <li class="statics-item">该月访问量 <span class="counter">{{ $statistics[1]->c }}</span></li>
+                <li class="statics-item">今日访问量 <span class="counter">{{ $statistics[2]->c }}</span></li>
             </div>
         </div>
     </div>
@@ -311,10 +314,10 @@
         $('.short-content').each(function () {
            var html = markdown.toHTML($(this).attr('data-value'));
            var pure_text = $(html).text();
-          
+
            $(this).text(pure_text);
            $(this).show();
-        }); 
+        });
     });
 
 </script>
@@ -370,6 +373,6 @@
         ]
     };
 
-   
+
 </script>
 @endsection

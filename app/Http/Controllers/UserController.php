@@ -10,7 +10,7 @@ class UserController extends Controller
 {
 
     const EXPIRE_TIME = 60 * 24 * 30;
-    
+
 
     public function loginPage (Request $request)
     {
@@ -29,7 +29,7 @@ class UserController extends Controller
         if ($user && Hash::check($request->input('password'), $user['password'])) {
 
             session(['user' => $user, 'login' => 1]);
-            //dd($request->session());
+            
             return redirect('/');
         }
 
