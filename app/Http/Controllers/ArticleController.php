@@ -121,18 +121,18 @@ class ArticleController extends Controller
     }
 
 
-    public function update (Request $request, $id)
+    public function update (Request $request, $type = 1, $id)
     {
-        $this->saveArticle($request, $id);
+        $this->saveArticle($request, $type, $id);
 
         $data = $this->fetchShowPageData($id);
 
         return view('article.detail', $data);
     }
 
-    public function store (Request $request)
+    public function store (Request $request, $type = 1)
     {
-        $article_id = $this->saveArticle($request);
+        $article_id = $this->saveArticle($request, $type);
 
         $data = $this->fetchShowPageData($article_id);
 
@@ -140,7 +140,7 @@ class ArticleController extends Controller
 
     }
 
-    public function saveArticle($request, $id = 0)
+    public function saveArticle($request, $type = 1, $id = 0)
     {
 
         $this->validate($request, [
@@ -158,7 +158,7 @@ class ArticleController extends Controller
         $article->content = $request->input('content');
         $article->category_id = $request->input('category');
         $article->user_id = $user['id'];
-        $article->type = $request['type'];
+        $article->type = $type;
 
         $article->save();
 

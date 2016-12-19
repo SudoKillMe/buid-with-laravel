@@ -263,34 +263,6 @@
     </div>
 
 </div>
-<!-- 登录modal -->
-<!-- <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-tip" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" name="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title text-center" id="login-tip">登录</h4>
-            </div>
-            <div class="modal-body">
-                <form class="login-form" action="/login" method="post">
-                    {{ csrf_field() }}
-                    <div class="control-group larger-margin-bottom">
-                        <input type="text" class="login-field form-control input-hg" name="name" placeholder="Enter your name" id="login-name">
-                        <span class="icon-user input-icon"></span>
-                    </div>
-                    <div class="control-group larger-margin-bottom">
-                        <input type="password" class="login-field form-control input-hg" name="password" placeholder="Enter your password" id="login-name">
-                        <span class="icon-lock input-icon"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-hg btn-block">登录</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 
 
 @endsection

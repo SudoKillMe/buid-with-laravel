@@ -28,7 +28,7 @@ Route::group(['prefix' => 'articles'], function () {
 	Route::get('{article}', 'ArticleController@show');
 	Route::get('{type?}/{article}/edit', 'ArticleController@edit');
 	Route::post('{type?}', 'ArticleController@store');
-	Route::put('{type}/{article}', 'ArticleController@update');
+	Route::put('{type?}/{article}', 'ArticleController@update');
 	Route::delete('{article}', 'ArticleController@destroy');
 
 });
