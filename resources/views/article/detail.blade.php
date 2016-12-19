@@ -145,7 +145,8 @@
 @section('script')
 <script src='/js/markdown.min.js'></script>
 <script>
-	var editUrl = '/articles/{{ $article->id }}/edit';
+	var editUrl = '/articles/{{ $article->type }}/{{ $article->id }}/edit';
+	var type = '{{ $article->type }}';
 	var edit = document.querySelector('.edit');
 	var content = document.querySelector('.content');
 	var _content = document.querySelector('._content');
@@ -154,7 +155,8 @@
 		location.href = editUrl;
 	});
 
-	content.innerHTML = markdown.toHTML(_content.value);
-
+	content.innerHTML = type == 1
+			? _content.value
+			: markdown.toHTML(_content.value);
 </script>
 @endsection

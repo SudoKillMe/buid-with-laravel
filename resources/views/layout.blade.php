@@ -57,7 +57,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if ($user = session('user'))
                     <li><a class="white-font">你好，<span>{{ $user->name }}</span></a></li>
-                    <li><a href="/logout" class="white-font">退出登录</a></li>
+                    <li><a href="/user/logout" class="white-font">退出登录</a></li>
                     @else
                     <li class="dropdown">
                         <a class="white-font">你好 , 游客</a>

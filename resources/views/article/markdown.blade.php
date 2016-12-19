@@ -1,5 +1,6 @@
 @extends('layout')
 @section('header')
+<link rel="stylesheet" href="/css/wangEditor.min.css">
 <style>
 	body{
 		padding: 70px 0;
@@ -31,18 +32,23 @@
 	.title-text{
 		font-size: 18px;
 		font-weight: bold;
+		line-height: 41px;
+		overflow: hidden;
 	}
-	.left,.right{
+	.switch {
+		float: right;
+	}
+	.content-left,.content-right{
 		width: 50%;
 		height: 900px;
 	}
-	.left{
+	.content-left{
 		float: left;
 		position: relative;
 		padding-bottom: 50px;
 	}
 
-	.right{
+	.content-right{
 		border: 2px solid #bdc3c7;
 		border-radius: 6px;
 		float: right;
@@ -64,67 +70,58 @@
 @endsection
 @section('content')
 
-	<div class="container wrap">
+<div class="container wrap">
+	<form method="post" class="form-horizontal" role="form"
 	@if (isset($article))
-	<form action="/articles/{{$article->id}}/" method="post" class="form-horizontal" role="form">
-		<div class="form-group" id="hack-title">
-			<label for="title-input" class="title-text">标题</label>
-			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" value="{{$article->title}}" id="title-input">
-		</div>
-
-		<p class="title-text">内容区</p>
-		<div class="content-wrap">
-			<div class="left">
-				{{ csrf_field() }}
-				{{ method_field('PUT') }}
-				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" id="content-input">{{$article->content}}</textarea>
-			</div>
-			<div class="right preview"></div>
-		</div>
-
-		<div class="form-footer">
-			<label for="category">选择文章类别</label>
-			<select name="category" id="category" class="form-control-static">
-				@foreach ($categories as $category)
-				<option value="{{$category->id}}" @if ($category->id == $article->category_id) selected @endif>{{ $category->name }}</option>
-				@endforeach
-			</select>
-			<button class="btn btn-primary submit">提交</button>
-		</div>
-	</form>
-	@else
-	<form action="/articles" method="post" class="form-horizontal" role="form">
-		<div class="form-group" id="hack-title">
-			<label for="title-input" class="title-text">标题</label>
-			<input type="text" class="form-control title-input" placeholder="输入您的标题" name="title" id="title-input">
-		</div>
-
-		<p class="title-text">内容区</p>
-		<div class="content-wrap">
-			<div class="left">
-				{{ csrf_field() }}
-				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" tabindex="-1"></textarea>
-				<button class="btn btn-primary submit">提交</button>
-			</div>
-			<div class="right preview"></div>
-		</div>
-
-		<div class="form-footer">
-			<label for="category">选择文章类别</label>
-			<select name="category" id="category" class="form-control-static">
-				@foreach ($categories as $category)
-				<option value="{{$category->id}}">{{ $category->name }}</option>
-				@endforeach
-			</select>
-			<button class="btn btn-primary submit">提交</button>
-		</div>
-
-	</form>
+	action="/articles/2/{{$article->id}}/"
+	@else 
+	action="/articles/2"
 	@endif
-	</div>
-@endsection
+	>
+		@if (isset($article))
+		{{ method_field('PUT') }}
+		@endif
+		{{ csrf_field() }}
+		<input type="hidden" name="type" value='2'>
+		<div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}" id="hack-title">
+			<label for="title-input" class="title-text">标题</label>
+			<input type="text" class="form-control title-input"
+			@if ($errors->has('title'))
+			placeholder="{{ $errors->first('title') }}"
+			@else
+			placeholder="请输入标题"
+			@endif
+			name="title" id="title-input"
+			@if (isset($article))  value="{{$article->title}}" @endif
+			>
+		</div>
 
+		<p class="title-text">内容区
+		@if (!isset($article)) 
+		<a href="/articles/create/1" class="switch btn btn-primary">切换为编辑器模式</a>
+		@endif
+		</p>
+		<div class="content-wrap">
+			<div class="content-left">
+				<textarea rows="40" class="form-control content" style="resize:none" placeholder="在这里书写markdown,在右方预览" name="content" id="content-input">@if (isset($article)){{$article->content}}@endif</textarea>
+			</div>
+			<div class="content-right preview"></div>
+		</div>
+
+		<div class="form-footer">
+			<label for="category">选择文章类别</label>
+			<select name="category" id="category" class="form-control-static">
+				@foreach ($categories as $category)
+				<option value="{{$category->id}}" @if (isset($article) && $category->id == $article->category_id) selected @endif>{{ $category->name }}</option>
+				@endforeach
+			</select>
+			<button class="btn btn-primary submit">提交</button>
+		</div>
+	</form>
+</div>
+@endsection
 @section('script')
+<script src="/js/wangEditor.min.js"></script>
 <script src='/js/markdown.min.js'></script>
 <script>
 	var textarea = document.querySelector('.content');
@@ -140,5 +137,8 @@
 	});
 
 </script>
-
+<script>
+	var editor = new wangEditor('test');
+	editor.create();
+</script>
 @endsection

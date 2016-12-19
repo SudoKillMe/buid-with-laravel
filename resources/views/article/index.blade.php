@@ -224,7 +224,7 @@
                         <span class="tip-item palette-headline"><span class="fui-eye"></span> {{ $article->view_count }}人阅读</span>
                         <span class="tip-item palette-headline"><span class="fui-bubble"></span> {{ $article->view_count }}人评论</span>
                     </p>
-                    <p class="list-group-item-text short-content" data-value="{{ $article->content }}">内容加载中...</p>
+                    <p class="list-group-item-text short-content" data-value="{{ $article->content }}" data-type="{{ $article->type }}">内容加载中...</p>
                 </a>
                 @endforeach
                 @endif
@@ -312,11 +312,15 @@
         });
 
         $('.short-content').each(function () {
-           var html = markdown.toHTML($(this).attr('data-value'));
-           var pure_text = $(html).text();
+            var type = $(this).attr('data-type');
+            var value = $(this).attr('data-value');
+            var html = type == 1
+                    ? value
+                    : markdown.toHTML(value);
+            var pure_text = $(html).text();
 
-           $(this).text(pure_text);
-           $(this).show();
+            $(this).text(pure_text);
+            $(this).show();
         });
     });
 
