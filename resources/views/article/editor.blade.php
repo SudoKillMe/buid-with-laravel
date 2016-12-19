@@ -127,4 +127,9 @@
 
 	editor.create();
 </script>
+<script>
+	function autoSave () {
+		
+	}
+</script>
 @endsection
