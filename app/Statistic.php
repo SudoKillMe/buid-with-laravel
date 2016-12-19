@@ -23,21 +23,18 @@ class Statistic extends Model
     public static function statistics ()
     {
         return [
-            Statistic::year(),
+            Statistic::total(),
             Statistic::month(),
             Statistic::day()
         ];
     }
 
-    public static function year ()
+    public static function total ()
     {
         $year = (new \DateTime)->format('Y');
 
-        $count = Statistic::where(
-                DB::raw('DATE_FORMAT(CURDATE(), "%Y")'),
-                $year
-            )->select(
-                DB::raw('SUM(count) as c')
+        $count = Statistic::select(
+                DB::raw('SUM(scount) as c')
             )->first();
 
         return $count;
@@ -49,9 +46,9 @@ class Statistic extends Model
 
         $count = Statistic::where(
                 DB::raw('DATE_FORMAT(CURDATE(), "%Y-%m")'),
-                $month
+                DB::raw('DATE_FORMAT(sday, "%Y-%m")')
             )->select(
-                DB::raw('SUM(count) as c')
+                DB::raw('SUM(scount) as c')
             )->first();
 
         return $count;
@@ -62,10 +59,10 @@ class Statistic extends Model
         $today = (new \DateTime)->format('Y-m-d');
 
         $count = Statistic::where(
-                DB::raw('DATE_FORMAT(CURDATE(), "%Y-%m-%d")'),
-                $today
+                DB::raw('DATE_FORMAT(sday, "%Y-%m-%d")'),
+                DB::raw('CURDATE()')
             )->select(
-                DB::raw('SUM(count) as c')
+                DB::raw('scount as c')
             )->first();
 
         return $count;

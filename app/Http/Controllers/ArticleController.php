@@ -75,23 +75,27 @@ class ArticleController extends Controller
 
 
      /*-------------------------------------------------*/
-    public function create (Request $request)
+    public function create (Request $request, $type = 1)
     {
 
         $data = $this->fetchEditPageData();
 
-        return view('article.edit', $data);
+        return $type == 1
+                ? view('article.editor', $data)
+                : view('article.markdown', $data);
 
     }
 
-    public function edit (Request $request, $article_id)
+    public function edit (Request $request, $type = 1, $article_id)
     {
 
         $data = $this->fetchEditPageData($article_id);
 
         if ( !$data['article'] ) return view('errors.404');
 
-        return view('article.edit', $data);
+        return $type == 1
+                ? view('article.editor', $data)
+                : view('article.markdown', $data);
 
     }
 
@@ -138,6 +142,12 @@ class ArticleController extends Controller
 
     public function saveArticle($request, $id = 0)
     {
+
+        $this->validate($request, [
+            'title'       => 'required|max:100',
+            'content'   => 'required',
+        ]);
+
         $user = User::currentUser();
 
         $article = $id
@@ -148,6 +158,7 @@ class ArticleController extends Controller
         $article->content = $request->input('content');
         $article->category_id = $request->input('category');
         $article->user_id = $user['id'];
+        $article->type = $request['type'];
 
         $article->save();
 
