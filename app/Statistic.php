@@ -14,9 +14,9 @@ class Statistic extends Model
     {
         $today = (new \DateTime)->format('Y-m-d');
 
-        $statistic = Statistic::firstOrNew(['date' => $today]);
+        $statistic = Statistic::firstOrNew(['sday' => $today]);
 
-        $statistic->count++;
+        $statistic->scount++;
         $statistic->save();
     }
 

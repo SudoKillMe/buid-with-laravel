@@ -58,7 +58,7 @@
 @section('content')
   <div class="bg">
    <div class="card">
-    <form action="/login" class="form login-card" method="post">
+    <form action="/user/login" class="form login-card" method="post">
         {{ csrf_field() }}
     	<h3 class="title">TimeRiver</h3>
         <div class="form-group{{ $errors->has('name_error') ? ' has-error' : '' }}">
@@ -83,7 +83,7 @@
     		<button type="submit" class="btn btn-primary btn-large btn-block">登录</button>
     	</div>
     	<div class="form-group">
-    		<a href="/register" class="register">注册</a>
+    		<a href="/user/register" class="register">注册</a>
     		<a href="/" class="guest">以游客身份登录</a>
     	</div>
     </form>

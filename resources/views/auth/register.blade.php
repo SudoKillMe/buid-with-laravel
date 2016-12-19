@@ -51,7 +51,7 @@
 @section('content')
   <div class="bg">
    <div class="card">
-    <form action="/register" class="form login-card" method="post">
+    <form action="/user/register" class="form login-card" method="post">
         {{ csrf_field() }}
     	<h3 class="title">T's River</h3>
  
@@ -86,7 +86,7 @@
     		<button type="submit" class="btn btn-primary btn-block">注册</button>
     	</div>
     	<div class="form-group">
-    		<a href="/login" class="login">登录</a>
+    		<a href="/user/login" class="login">登录</a>
     		<a href="/" class="guest">以游客身份登录</a>
     	</div>
     </form>
