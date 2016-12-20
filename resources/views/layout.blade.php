@@ -8,8 +8,10 @@
         <link rel="stylesheet" href="/css/font-awesome.min.css">
         <style>
             body{
+                font:Microsoft YaHei,Tahoma,Helvetica,'SimSun',sans-serif;
                 margin:0;padding:0 0 50px;
                 position: relative;
+                min-height:1000px;
             }
             .bg-transparent{
                 /*background: rgba(0,0,0,.1);*/
@@ -34,13 +36,37 @@
                 bottom:0;
                 width: 100%;
                 background: rgba(255,255,255,.1);
-                text-align: center;
-                color: rgba(196,227,255,0.8);
+                color: #666;
+                border-top: 1px solid #f2f2f2;
+                line-height: 50px;
+                font-size: 14px;
             }
             .copyright{
+                text-align: center;
                 margin:0;
-                height: 40px;
-                line-height: 40px;
+                line-height: inherit;
+                font-size: 13px;
+                
+            }
+            .contact-git, .contact-weibo {
+                cursor: pointer;
+                color : #666;
+            }
+            .contact-git::after, .contact-weibo::before {
+                content: '';
+                display: inline-block;
+                width:30px;
+            }
+            .contact{
+                font-size: 13px;
+                float:left;
+                line-height: inherit;
+               
+            }
+            .support{
+                float: right;
+                line-height: inherit;
+                margin-right: 50px;
             }
         </style>
         @yield('header')
@@ -84,7 +110,11 @@
         @yield('content')
 
         <div class="footer">
-            <p class="copyright">copyright &copy; 2016 techer</p>
+            <div class="container">
+                <span class="support">本站基于laravel构建</span>
+                <span class="contact"><a href="https://github.com/SudoKillMe" class="contact-git" target="_blank"><i class="icon-github"></i>&nbsp;我的GitHub </a> - <a href="http://weibo.com/langcundong" class="contact-weibo" target="_blank"><i class="icon-weibo"></i>&nbsp;我的微博 </a></span>
+                <p class="copyright">copyright &copy;&nbsp; 2015-2016 techer </p>
+            </div>
         </div>
     </body>
     <script type="text/javascript" src="/js/flatui/jquery.min.js"></script>

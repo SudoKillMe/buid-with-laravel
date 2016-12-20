@@ -53,12 +53,11 @@
 }
 
 .content-wrap{
-    height:1000px;
+    margin-bottom: 100px;
 }
 .left, .right{
     box-sizing: border-box;
     padding: 20px;
-    height: 1000px;
 }
 .tip{
     margin-bottom: 5px;
@@ -66,6 +65,8 @@
 }
 .tip-item{
     margin-right: 15px;
+    color: #777;
+    font-size: 13px;
 }
 
 .input-icon{
@@ -117,20 +118,20 @@
 }
 
 
-.archive,.statistics,.ranking{
+.categories,.archive,.statistics,.ranking{
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
     margin: 20px 20px;
     background-color: #f3f3f3;
     border-radius: 5px;
 }
-.archive-title ,.statics-title,.ranking-title{
+.category-title, .archive-title ,.statics-title,.ranking-title{
     font-size: 16px;
     padding:10px 0;
     margin: 0;
     text-align: center;
 }
-.archive-item ,.statics-item,.ranking-item{
+.category-item,.archive-item ,.statics-item,.ranking-item{
     font-size: 16px;
     line-height: 40px;
     display: block;
@@ -183,25 +184,18 @@
 
         <div class="collapse navbar-collapse" id="navbar-1">
             <ul class="nav navbar-nav">
-                @foreach ($categories as $category)
-                <li @if ($category_id == $category->id) class="active" @endif>
-                    <a href="/articles/category/{{ $category->id }}">{{ $category->name }}</a>
-                </li>
-                @endforeach
                 <li @if ($category_id == 0) class="active" @endif>
-                    <a href="/articles/category/0">全部</a>
+                    <a href="/articles/category/0">博文</a>
                 </li>
-   <!--              <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术相关 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        @foreach ($categories as $category)
-                        <li><a href="/articles/category/{{$category->id}}">{{ $category->name }}</a></li>
-                        @endforeach
-                        <li class="divider"></li>
-                        <li><a href="#">全部</a></li>
-                    </ul>
-                </li> -->
-                <!-- <li><a href="#">工具</a></li> -->
+                <li>
+                    <a href="">收藏</a>
+                </li>
+                <li>
+                    <a href="">音乐</a>
+                </li>
+                <li>
+                    <a href="">工具</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/articles/create">写篇文章</a></li>
@@ -220,9 +214,9 @@
                 <a href="/articles/{{ $article->id }}" class="list-group-item">
                     <h5 class="list-group-item-heading">{{ $article->title }}</h5>
                     <p class="tip">
-                        <span class="tip-item palette-headline"><span class="fui-time"></span> {{ $article->updated_at }}</span>
-                        <span class="tip-item palette-headline"><span class="fui-eye"></span> {{ $article->view_count }}人阅读</span>
-                        <span class="tip-item palette-headline"><span class="fui-bubble"></span> {{ $article->view_count }}人评论</span>
+                        <span class="tip-item"><span class="icon-time"></span> {{ $article->updated_at }}</span>
+                        <span class="tip-item"><span class="fui-eye"></span> {{ $article->view_count }}人阅读</span>
+                        <span class="tip-item"><span class="icon-tag"></span> 所属类别：{{ $article->category->name }}</span>
                     </p>
                     <p class="list-group-item-text short-content" data-value="{{ $article->content }}" data-type="{{ $article->type }}">内容加载中...</p>
                 </a>
@@ -233,14 +227,21 @@
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
             <canvas id="chart" width="200" height="200"></canvas>
+            
+            <div class="categories">
+                <p class="category-title"><i class="icon-archive"></i>&nbsp;分类归档</p>
+                @foreach ($categories as $category)
+                <a href="/articles/category/{{ $category->id }}" class="category-item"><i class="icon-tags"></i> &nbsp;{{ $category->name }} <span class="counter">{{ count($category->articles) }}</span></a>
+                @endforeach
+            </div>
 
             <div class="archive">
-                <p class="archive-title">博客归档</p>
+                <p class="archive-title">日期归档</p>
                 @foreach ($archives as $archive)
                 <a  href="/articles/archives/{{ $archive->d }}" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
                 @endforeach
             </div>
-
+            
             <div class="ranking">
                 <p class="ranking-title">排行榜</p>
                 @foreach ($ranking as $article)
@@ -274,14 +275,24 @@
     $(function () {
 
         $tab = $('.tabs');
-        $height = $('.bg-blue').innerHeight() - $tab.height();
+        $top_height = $('.top').innerHeight();
+        $critical_point = $('.bg-blue').innerHeight() - $top_height;   //临界点
+
         $(document).scroll(function () {
-            if ( $(this).scrollTop() >= $height ) {
-               $tab.addClass('navbar-fixed-top fixed-top-top');
+            if ($(this).scrollTop() >= $critical_point) {
+                $tab.addClass('navbar-fixed-top');
+                $tab.css('top', $top_height + 'px');
             } else {
-                $tab.removeClass('navbar-fixed-top fixed-top-top');
+                $tab.removeClass('navbar-fixed-top');
+                $tab.css('top', 0);
             }
         });
+
+        $(window).resize(function () {
+            $top_height = $('.top').innerHeight();
+            $critical_point = $('.bg-blue').innerHeight() - $top_height;
+        });
+
 
         $('.short-content').each(function () {
             var type = $(this).attr('data-type');
