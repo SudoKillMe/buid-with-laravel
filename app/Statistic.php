@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Statistic extends Model
 {
 
-    protected $fillable = ['date', 'count'];
+    protected $fillable = ['sday', 'scount'];
 
     public static function increase ()
     {
