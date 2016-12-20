@@ -55,7 +55,7 @@
             .contact-git::after, .contact-weibo::before {
                 content: '';
                 display: inline-block;
-                width:30px;
+                width:15px;
             }
             .contact{
                 font-size: 13px;

@@ -229,9 +229,9 @@
             <canvas id="chart" width="200" height="200"></canvas>
             
             <div class="categories">
-                <p class="category-title"><i class="icon-archive"></i>&nbsp;分类归档</p>
+                <p class="category-title">分类归档</p>
                 @foreach ($categories as $category)
-                <a href="/articles/category/{{ $category->id }}" class="category-item"><i class="icon-tags"></i> &nbsp;{{ $category->name }} <span class="counter">{{ count($category->articles) }}</span></a>
+                <a href="/articles/category/{{ $category->id }}" class="category-item">{{ $category->name }} <span class="counter">{{ count($category->articles) }}</span></a>
                 @endforeach
             </div>
 
