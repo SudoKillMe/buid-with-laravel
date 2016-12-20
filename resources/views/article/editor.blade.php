@@ -29,6 +29,9 @@
 	#hack-title{
 		margin: 20px 0;
 	}
+	.wrap {
+		margin-bottom: 100px;
+	}
 	.title-text{
 		font-size: 18px;
 		font-weight: bold;
@@ -59,6 +62,7 @@
 	}
 	.content-wrap {
 		overflow: hidden;
+
 	}
 	.form-footer {
 		margin-top: 20px;
@@ -72,9 +76,9 @@
 
 <div class="container wrap">
 	<form method="post" class="form-horizontal" role="form"
-	@if (isset($article)) 
-	action="/articles/1/{{$article->id}}/" 
-	@else 
+	@if (isset($article))
+	action="/articles/1/{{$article->id}}/"
+	@else
 	action="/articles/1"
 	@endif>
 		@if (isset($article))
@@ -85,20 +89,20 @@
 
 		<div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}" id="hack-title">
 			<label for="title-input" class="title-text">标题</label>
-			<input 
-			type="text" class="form-control title-input" 
+			<input
+			type="text" class="form-control title-input"
 			@if ($errors->has('title'))
 			placeholder="{{ $errors->first('title') }}"
 			@else
 			placeholder="请输入标题"
 			@endif
-			name="title" 
+			name="title"
 			id="title-input"
 			@if (isset($article)) value="{{$article->title}}" @endif>
 		</div>
 
-		<p class="title-text">内容区 
-		@if (!isset($article)) 
+		<p class="title-text">内容区
+		@if (!isset($article))
 		<a href="/articles/create/2" class="switch btn btn-primary">切换为markdown模式</a>
 		@endif
 		</p>
@@ -129,7 +133,7 @@
 </script>
 <script>
 	function autoSave () {
-		
+
 	}
 </script>
 @endsection

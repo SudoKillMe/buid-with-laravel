@@ -29,6 +29,9 @@
 	#hack-title{
 		margin: 20px 0;
 	}
+	.wrap {
+		margin-bottom: 100px;
+	}
 	.title-text{
 		font-size: 18px;
 		font-weight: bold;
@@ -74,7 +77,7 @@
 	<form method="post" class="form-horizontal" role="form"
 	@if (isset($article))
 	action="/articles/2/{{$article->id}}/"
-	@else 
+	@else
 	action="/articles/2"
 	@endif
 	>
@@ -97,7 +100,7 @@
 		</div>
 
 		<p class="title-text">内容区
-		@if (!isset($article)) 
+		@if (!isset($article))
 		<a href="/articles/create/1" class="switch btn btn-primary">切换为编辑器模式</a>
 		@endif
 		</p>

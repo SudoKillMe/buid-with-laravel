@@ -46,7 +46,13 @@
     margin-bottom: 0
 }
 .navbar-brand {
-    text-shadow: 2px 2px 2px #B3B8A6;
+    text-shadow: 0 1px 1px #fff;
+    /*text-shadow: 0 1px hsl(0, 0%, 85%),
+                 0 2px hsl(0, 0%, 80%),
+                 0 3px hsl(0, 0%, 75%),
+                 0 4px hsl(0, 0%, 70%),
+                 0 5px hsl(0, 0%, 65%),
+                 0 5px 10px black;*/
 }
 .fixed-top-top{
     top: 53px;
@@ -105,6 +111,7 @@
     margin-bottom: 10px;
     border: none;
     border-bottom: 1px dashed #ddd;
+    overflow: hidden;
 }
 .list-group-item-text{
     font-size: 13px;
@@ -117,7 +124,45 @@
     display: none;
 }
 
+.list-title {
+    padding: 0 15px;
+    font-weight: bold;
+}
+.collect-name,.collect-url,.collect-time{
+    float: left;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 30px;
+    /*float: left;
+    margin-right: 50px;*/
+}
+.collect-name {
+    width: 20%;
+}
+.collect-url {
+    width: 40%;
+}
+.collect-time {
+    width: 20%;
+    text-align: right;
+    font-size: 14px;
+}
 
+.collect-delete {
+    font-size: 14px;
+    line-height: 30px;
+    float: right;
+    cursor: pointer;
+}
+.collect-desc::before {
+    content: '';
+    display: block;
+    clear: both;
+    height:1px;
+    visibility: hidden;
+}
 .categories,.archive,.statistics,.ranking{
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
@@ -208,7 +253,8 @@
 <div class="container content">
     <div class="row content-wrap">
         <div class="left col-sm-8 col-xs-12">
-            <div class="list-group">
+            <!-- 博客内容 -->
+            <!-- <div class="list-group">
                 @if (!empty($articles))
                 @foreach ($articles as $article)
                 <a href="/articles/{{ $article->id }}" class="list-group-item">
@@ -222,12 +268,35 @@
                 </a>
                 @endforeach
                 @endif
+            </div> -->
+            <!-- 我的收藏 -->
+            <div class="list-group">
+                <p class="list-title">我收藏的链接</p>
+                <div class="list-group-item">
+                    <a href="#" class="collect-name">收藏的第一条</a>
+                    <span class="collect-url">www.baidu.comsadfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdf</span>
+                    <span class="collect-time">2016-11-28</span>
+                    <span class="collect-delete">删除</span>
+                    <code class="collect-desc">备注：超赞，想法绝了，以后要好好学习一下</code>
+                </div>
+                <div class="list-group-item">
+                    <a href="#" class="collect-name">收藏的第一条</a>
+                    <span class="collect-url">www.baidu.com</span>
+                    <span class="collect-time">2016-11-28</span>
+                    <span class="collect-delete">删除</span>
+                </div>
+                <div class="list-group-item">
+                    <a href="#" class="collect-name">收藏的第一条</a>
+                    <span class="collect-url">www.baidu.com</span>
+                    <span class="collect-time">2016-11-28</span>
+                    <span class="collect-delete">删除</span>
+                </div>
             </div>
         </div>
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
             <canvas id="chart" width="200" height="200"></canvas>
-            
+
             <div class="categories">
                 <p class="category-title">分类归档</p>
                 @foreach ($categories as $category)
@@ -241,7 +310,7 @@
                 <a  href="/articles/archives/{{ $archive->d }}" class="archive-item">{{ $archive->d }} <span class="counter">{{ $archive->c }}</span></a>
                 @endforeach
             </div>
-            
+
             <div class="ranking">
                 <p class="ranking-title">排行榜</p>
                 @foreach ($ranking as $article)
