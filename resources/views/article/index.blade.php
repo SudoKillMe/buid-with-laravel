@@ -127,6 +127,15 @@
 .list-title {
     padding: 0 15px;
     font-weight: bold;
+/*    border-bottom: 1px solid #ddd;
+    margin-bottom: 0;*/
+}
+.add {
+    cursor: pointer;
+    float: right;
+    color: #666;
+    font-size: 14px;
+    line-height: inherit;
 }
 .collect-name,.collect-url,.collect-time{
     float: left;
@@ -156,13 +165,18 @@
     float: right;
     cursor: pointer;
 }
-.collect-desc::before {
+.collect-desc {
+    display: block;
+    clear: both;
+}
+
+/*.collect-desc::before {
     content: '';
     display: block;
     clear: both;
     height:1px;
     visibility: hidden;
-}
+}*/
 .categories,.archive,.statistics,.ranking{
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
@@ -197,6 +211,23 @@
     float: right;
     margin-top: 11px;
 }
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+.modal-body{
+    padding: 15px 25px;
+}
+.text-center {
+    text-align: center;
+}
+/*.fav-form {
+    padding: 0 20px;
+}*/
 </style>
 
 @endsection
@@ -229,11 +260,11 @@
 
         <div class="collapse navbar-collapse" id="navbar-1">
             <ul class="nav navbar-nav">
-                <li @if ($category_id == 0) class="active" @endif>
+                <li @if ($active == 'articles') class="active" @endif>
                     <a href="/articles/category/0">博文</a>
                 </li>
-                <li>
-                    <a href="">收藏</a>
+                <li @if ($active == 'favorites') class="active" @endif>
+                    <a href="/favorites">收藏</a>
                 </li>
                 <li>
                     <a href="">音乐</a>
@@ -254,8 +285,8 @@
     <div class="row content-wrap">
         <div class="left col-sm-8 col-xs-12">
             <!-- 博客内容 -->
-            <!-- <div class="list-group">
-                @if (!empty($articles))
+            @if (!empty($articles))
+            <div class="list-group">
                 @foreach ($articles as $article)
                 <a href="/articles/{{ $article->id }}" class="list-group-item">
                     <h5 class="list-group-item-heading">{{ $article->title }}</h5>
@@ -267,31 +298,30 @@
                     <p class="list-group-item-text short-content" data-value="{{ $article->content }}" data-type="{{ $article->type }}">内容加载中...</p>
                 </a>
                 @endforeach
-                @endif
-            </div> -->
-            <!-- 我的收藏 -->
-            <div class="list-group">
-                <p class="list-title">我收藏的链接</p>
-                <div class="list-group-item">
-                    <a href="#" class="collect-name">收藏的第一条</a>
-                    <span class="collect-url">www.baidu.comsadfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdf</span>
-                    <span class="collect-time">2016-11-28</span>
-                    <span class="collect-delete">删除</span>
-                    <code class="collect-desc">备注：超赞，想法绝了，以后要好好学习一下</code>
-                </div>
-                <div class="list-group-item">
-                    <a href="#" class="collect-name">收藏的第一条</a>
-                    <span class="collect-url">www.baidu.com</span>
-                    <span class="collect-time">2016-11-28</span>
-                    <span class="collect-delete">删除</span>
-                </div>
-                <div class="list-group-item">
-                    <a href="#" class="collect-name">收藏的第一条</a>
-                    <span class="collect-url">www.baidu.com</span>
-                    <span class="collect-time">2016-11-28</span>
-                    <span class="collect-delete">删除</span>
-                </div>
             </div>
+            @endif
+            <!-- 我的收藏 -->
+            @if (isset($favorites))
+            <div class="list-group">
+                
+                <p class="list-title">我收藏的链接 <span class="add" data-toggle="modal" data-target="#add-collect-modal"><i class="icon-plus"></i>&nbsp;添加</span></p>
+                @if (!empty($favorites)) 
+                @foreach ($favorites as $favorite)
+                <div class="list-group-item">
+                    <a href="{{$favorite->url}}" class="collect-name" target="_blank">{{ $favorite->name }}</a>
+                    <span class="collect-url">{{ $favorite->url }}</span>
+                    <span class="collect-time">{{ $favorite->created_at }}</span>
+                    <span class="collect-delete" data-id="{{ $favorite->id }}">删除</span>
+                    @if ($favorite->remark)
+                    <code class="collect-desc">备注：{{ $favorite->remark }}</code>
+                    @endif
+                </div>
+                @endforeach
+                @endif
+            
+
+            </div>
+            @endif
         </div>
         <div class="right col-sm-4 col-xs-12">
             <!-- todolist -->
@@ -318,9 +348,6 @@
                     {{ $article->title }} <span class="counter">阅读 {{ $article->view_count }}</span>
                 </a>
                 @endforeach
-                <!-- <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
-                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a>
-                <a href="" class="ranking-item">sdfsdfsdfsdf <span class="counter">阅读 111</span></a> -->
             </div>
 
             <div class="statistics">
@@ -335,11 +362,53 @@
 </div>
 
 
+<div class="modal fade" id="add-collect-modal" tabindex="-1" role="dialog" aria-labelledby="collect-tip" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" name="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title text-center" id="collect-tip">添加收藏</h4>
+            </div>
+            <form action="/favorites" method="post" role="form" class="fav-form">
+                <div class="modal-body">        
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="fav-name">名称</label>
+                        <input type="text" class="form-control" id="fav-name" name="fav-name" placeholder="输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="fav-url">链接地址</label>
+                        <input type="text" class="form-control" id="fav-url" name="fav-url" placeholder="输链接地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="fav-remark">备注</label>
+                        <input type="text" class="form-control" id="fav-remark" name="fav-remark" placeholder="添加备注">
+                    </div>
+                </div>
+                <div class="modal-footer text-center">  
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary btn-lg">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
 <script src="/js/Chart.min.js"></script>
 <script src='/js/markdown.min.js'></script>
+<script>
+    var delete_url = '/favorites/delete/';
+    $(function () {
+        $('.collect-delete').on('click', function () {
+            location.href = delete_url + $(this).attr('data-id');
+        });
+    });
+</script>
 <script>
     $(function () {
 
@@ -399,6 +468,7 @@
                         labels: labels,
                         datasets: [
                             {
+                                label: '写作频率',
                                 fillColor: 'rgba(220,220,220,.5)',
                                 strokeColor: 'rgba(220,220,220,1)',
                                 pointColor: 'rgba(220,220,220,1)',
@@ -416,18 +486,18 @@
 
     })
     var ctx = document.getElementById('chart').getContext('2d');
-    var data = {
-        labels: labels,
-        datasets: [
-            {
-                fillColor: 'rgba(220,220,220,.5)',
-                strokeColor: 'rgba(220,220,220,1)',
-                pointColor: 'rgba(220,220,220,1)',
-                pointStrokeColor: '#fff',
-                data: char_data
-            }
-        ]
-    };
+    // var data = {
+    //     labels: labels,
+    //     datasets: [
+    //         {
+    //             fillColor: 'rgba(220,220,220,.5)',
+    //             strokeColor: 'rgba(220,220,220,1)',
+    //             pointColor: 'rgba(220,220,220,1)',
+    //             pointStrokeColor: '#fff',
+    //             data: char_data
+    //         }
+    //     ]
+    // };
 
 
 </script>

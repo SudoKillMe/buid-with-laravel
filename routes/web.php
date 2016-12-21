@@ -43,4 +43,12 @@ Route::group(['prefix' => 'user'], function () {
 	
 });
 
+Route::group(['prefix' => 'favorites'], function () {
+
+	Route::get('/', 'FavoriteController@index');
+	Route::post('/', 'FavoriteController@store');
+	Route::get('/delete/{favorite}', 'FavoriteController@destroy');
+
+});
+
 Route::get('/api/archives', 'ArticleController@apiArchives');

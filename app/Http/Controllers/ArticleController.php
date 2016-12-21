@@ -42,34 +42,22 @@ class ArticleController extends Controller
     }
 
     //get index page data
-    public function fetchIndexPageData ($category_id = 0, $archive_id = '')
+    public function fetchIndexPageData ($category_id = 0, $archive_id = 0)
     {
         $user = User::currentUser();
 
-        $articles = $category_id
-                ? ($archive_id
-                    ? $user->articles()
-                            ->where('category_id', $category_id)
-                            ->where(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")'), $archive_id)
-                            ->get()
-                    : $user->articles()
-                            ->where('category_id', $category_id)
-                            ->get())
-                : ($archive_id
-                    ? $user->articles()
-                            ->where(DB::raw('DATE_FORMAT(updated_at, "%Y年-%m月")'), $archive_id)
-                            ->get()
-                    : $user->articles);
+        $articles = $category_id || $archive_id 
+                ? ($category_id
+                    ? Article::getCurrentArticlesByCategory($user, $category_id)
+                    : Article::getCurrentArticlesByArchive($user, $archive_id))
+                : Article::getCurrentArticles($user);
 
-        $categories = Category::all();
+        $common = CommonController::fetchIndexPageCommonData($user);
 
-        $archives = $this->archives($user);
+        $active = 'articles';
 
-        $ranking = $this->rank($user);
+        return compact('articles', 'active', 'category_id', 'archive_id') + $common;
 
-        $statistics = Statistic::statistics();
-
-        return compact('articles', 'categories', 'archives', 'ranking', 'category_id', 'archive_id', 'statistics');
     }
      /*-------------------------------------------------*/
 
@@ -187,30 +175,30 @@ class ArticleController extends Controller
         return view('article.index', $this->fetchIndexPageData());
     }
 
-    public function rank ($user)
-    {
-        $ranking = $user->articles()
-                ->orderBy('view_count', 'desc')
-                ->get();
+    // public function rank ($user)
+    // {
+    //     $ranking = $user->articles()
+    //             ->orderBy('view_count', 'desc')
+    //             ->get();
 
-        return $ranking;
-    }
+    //     return $ranking;
+    // }
 
     //根据日期分组，获取每月的文章数量
-    public function archives ($user)
-    {
-        // $user = User::currentUser();
+    // public function archives ($user)
+    // {
+    //     // $user = User::currentUser();
 
-        $archives = Article::where('user_id', $user['id'])
-                ->select(
-                    DB::raw('DATE_FORMAT(created_at, "%Y年-%m月") as d'),
-                    DB::raw('COUNT(*) as c')
-                )->groupBy(
-                    DB::raw('DATE_FORMAT(created_at, "%Y年-%m月")')
-                )->get();
+    //     $archives = Article::where('user_id', $user['id'])
+    //             ->select(
+    //                 DB::raw('DATE_FORMAT(created_at, "%Y年-%m月") as d'),
+    //                 DB::raw('COUNT(*) as c')
+    //             )->groupBy(
+    //                 DB::raw('DATE_FORMAT(created_at, "%Y年-%m月")')
+    //             )->get();
 
-        return $archives;
-    }
+    //     return $archives;
+    // }
     //{16-12: 12, }
     public function apiArchives ()
     {

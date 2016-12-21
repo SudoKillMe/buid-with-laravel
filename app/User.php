@@ -14,6 +14,11 @@ class User extends Model
         return $this->hasMany('App\Article');
     }
 
+    public function favorites ()
+    {
+        return $this->hasMany('App\Favorite');
+    }
+
     public static function currentUser ()
     {
     	return session('login') 
