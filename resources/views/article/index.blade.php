@@ -291,7 +291,7 @@ label {
                 <a href="/articles/{{ $article->id }}" class="list-group-item">
                     <h5 class="list-group-item-heading">{{ $article->title }}</h5>
                     <p class="tip">
-                        <span class="tip-item"><span class="icon-time"></span> {{ $article->updated_at }}</span>
+                        <span class="tip-item"><span class="icon-time"></span> {{ $article->created_at }}</span>
                         <span class="tip-item"><span class="fui-eye"></span> {{ $article->view_count }}人阅读</span>
                         <span class="tip-item"><span class="icon-tag"></span> 所属类别：{{ $article->category->name }}</span>
                     </p>

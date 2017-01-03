@@ -106,7 +106,7 @@
 	<div class="content-wrap container">
 		<h3 class="title">{{ $article->title }}</h3>
 		<p class="header">
-			<span class="time"><span class="icon-time"></span>&nbsp;{{ $article->updated_at }}</span>
+			<span class="time"><span class="icon-time"></span>&nbsp;{{ $article->created_at }}</span>
 			<span class="view"><span class="icon-eye-open"></span>&nbsp;{{ $article->view_count }}人阅读</span>
 			<span class="edit"><span class="icon-edit">&nbsp;编辑</span></span>
 			<span class="delete"  data-toggle="modal" data-target="#delete-modal"><span class="icon-trash">&nbsp;删除</span></span>
